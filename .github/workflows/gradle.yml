@@ -25,7 +25,7 @@ jobs:
     - name: Build Desktop with Gradle
       run: ./gradlew desktop:dist
       
-    - name: Push desktop/build/libs to master
+    - name: Push desktop/build/libs to main
       run: |-
         git config user.name "Automated"
         git config user.email "actions@users.noreply.github.com"
