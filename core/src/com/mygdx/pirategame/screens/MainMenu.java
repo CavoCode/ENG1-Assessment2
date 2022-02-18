@@ -2,7 +2,9 @@ package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -21,6 +23,7 @@ public class MainMenu implements Screen {
 
     private final PirateGame parent;
     private final Stage stage;
+    private ShapeRenderer shapeRenderer;
 
     /**
      * Instantiates a new Main menu.
@@ -96,6 +99,8 @@ public class MainMenu implements Screen {
                 Gdx.app.exit();
             }
         });
+
+        shapeRenderer = new ShapeRenderer();
     }
 
     /**
@@ -106,6 +111,20 @@ public class MainMenu implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        /**
+         * Here is a test code of making an opaque overlay which may be used to 
+         * implement weather dynamically across the whole map
+         */
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(0,1,0,1));
+        shapeRenderer.rect(50,50, 50, 50);
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.3f));
+        shapeRenderer.rect(0, 0, stage.getWidth(), stage.getHeight());
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
