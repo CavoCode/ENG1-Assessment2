@@ -24,10 +24,10 @@ public class Player extends Sprite {
     private Sound breakSound;
     private Array<CannonFire> cannonBalls;
     private static float dragFactor = 1.0f;
-    private static float maxSpeed = 2.5f + dragFactor;
+    private static float maxSpeed = 5f + dragFactor;
     private static float accel = 0.05f;
     private float speed = 0.0f;
-    //private static float sin45 = 0.7f;
+    private float rotation;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -133,23 +133,26 @@ public class Player extends Sprite {
     	float deltaliny = (y * accel);
     	linx += deltalinx;
     	liny += deltaliny;
-    	float newSpeed = findSpeed(linx,liny);
+    	//float newSpeed = findSpeed(linx,liny);
     	//drag = calcDrag(newSpeed);
-    	linx = calcDrag(linx, newSpeed);
-    	liny = calcDrag(liny, newSpeed);
+    	linx = calcDrag(linx);
+    	liny = calcDrag(liny);
     	//linx = b2body.getLinearVelocity().x + deltalinx;
     	//liny = b2body.getLinearVelocity().y + deltaliny;
     	b2body.setLinearVelocity(linx, liny);
     }
     
-    private float calcDrag(float linSpeed, float speed) {
+    private float calcDrag(float speed) {
     	double drag = (Math.pow(speed, 2) / Math.pow(maxSpeed, 3));
-    	drag = drag * dragFactor;
-    	if (linSpeed > 0) {
-    		return (float) (linSpeed - drag);
+    	drag = drag * dragFactor + dragFactor/901;
+    	if (drag < dragFactor/900 && drag > -dragFactor/900) {
+    		drag = 0;
+    	}
+    	if (speed > 0) {
+    		return (float) (speed - drag);
     	}
     	else {
-    		return (float) (linSpeed + drag);
+    		return (float) (speed + drag);
     	}
     }
     
