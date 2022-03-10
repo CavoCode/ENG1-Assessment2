@@ -23,6 +23,11 @@ public class Player extends Sprite {
     public Body b2body;
     private Sound breakSound;
     private Array<CannonFire> cannonBalls;
+    private static float dragFactor = 1.0f;
+    private static float maxSpeed = 2.5f + dragFactor;
+    private static float accel = 0.05f;
+    private float speed = 0.0f;
+    //private static float sin45 = 0.7f;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -55,6 +60,8 @@ public class Player extends Sprite {
      */
     public void update(float dt) {
         // Updates position and orientation of player
+    	speed = findSpeed(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
+    	System.out.println(speed);
         setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
         b2body.setTransform(b2body.getWorldCenter(), angle - ((float)Math.PI) / 2.0f);
@@ -117,6 +124,37 @@ public class Player extends Sprite {
         cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() + Math.PI / 6), 5, b2body.getLinearVelocity()));
         }
          */
+    }
+    
+    public void applyImpuse(int x,int y) {
+    	float linx = b2body.getLinearVelocity().x;
+    	float liny = b2body.getLinearVelocity().y;
+    	float deltalinx = (x * accel);
+    	float deltaliny = (y * accel);
+    	linx += deltalinx;
+    	liny += deltaliny;
+    	float newSpeed = findSpeed(linx,liny);
+    	//drag = calcDrag(newSpeed);
+    	linx = calcDrag(linx, newSpeed);
+    	liny = calcDrag(liny, newSpeed);
+    	//linx = b2body.getLinearVelocity().x + deltalinx;
+    	//liny = b2body.getLinearVelocity().y + deltaliny;
+    	b2body.setLinearVelocity(linx, liny);
+    }
+    
+    private float calcDrag(float linSpeed, float speed) {
+    	double drag = (Math.pow(speed, 2) / Math.pow(maxSpeed, 3));
+    	drag = drag * dragFactor;
+    	if (linSpeed > 0) {
+    		return (float) (linSpeed - drag);
+    	}
+    	else {
+    		return (float) (linSpeed + drag);
+    	}
+    }
+    
+    private float findSpeed(float x, float y) {
+    	return (float) (Math.pow(x, 2) + Math.pow(y, 2));
     }
 
     /**

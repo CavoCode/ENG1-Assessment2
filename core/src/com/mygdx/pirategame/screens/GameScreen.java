@@ -265,25 +265,33 @@ public class GameScreen implements Screen {
     public void handleInput(float dt) {
         if (gameStatus == GAME_RUNNING) {
             // Left physics impulse on 'A'
+        	int impulseX = 0;
+        	int impulseY = 0;
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
+                //player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
+            	impulseX -= 1;
             }
             // Right physics impulse on 'D'
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
+                //player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
+            	impulseX += 1;
             }
             // Up physics impulse on 'W'
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
+                //player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
+            	impulseY += 1;
             }
             // Down physics impulse on 'S'
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
+                //player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
+            	impulseY -= 1;	
             }
+            player.applyImpuse(impulseX, impulseY);
             // Cannon fire on 'E'
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 player.fire();
             }
+            /*
             // Checking if player at max velocity, and keeping them below max
             if (player.b2body.getLinearVelocity().x >= maxSpeed) {
                 player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
@@ -296,7 +304,7 @@ public class GameScreen implements Screen {
             }
             if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
                 player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
-            }
+            }*/
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if(gameStatus == GAME_PAUSED) {
