@@ -1,4 +1,4 @@
-package com.mygdx.pirategame.testing;
+package com.mygdx.pirategame.tests;
 
 import com.badlogic.gdx.Gdx;
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  ******************************************************************************/
 
-package com.mygdx.pirategame.testing;
+package com.mygdx.pirategame.tests;
 
 import java.util.HashMap;
 import java.util.Map;
