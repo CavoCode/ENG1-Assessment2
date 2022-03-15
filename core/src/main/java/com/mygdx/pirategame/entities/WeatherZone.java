@@ -50,7 +50,7 @@ public class WeatherZone extends Enemy{
     public WeatherZone (GameScreen screen, float x, float y, String cloud) {
         super(screen, x, y);
         this.screen = screen;
-        weatherTexture = new Texture(cloud); //fix later
+        weatherTexture = new Texture(cloud);
 
         //Set the position and size of the Weather area
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
@@ -63,19 +63,20 @@ public class WeatherZone extends Enemy{
     }
 
 
+    //should theoretically lower the max speed of the ships in contact with it
     @Override
     public void onContact() {
-        
+        //need to figure out
     }
 
 
     public void update(float dt) {
-
+        //need to figure out
     }
 
 
     @Override
     protected void defineEnemy() {
-    
+        //need to figure out
     }
 }
