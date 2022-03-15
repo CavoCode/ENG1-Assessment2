@@ -38,26 +38,34 @@ public class WeatherZone extends Enemy{
     //public ArrayList<Submerged> floating = new ArrayList<>();
     public Texture weatherTexture;
 
-    public WeatherZone (GameScreen screen, String weatherID, float x, float y, String cloud) {
+
+    /**
+     * 
+     * 
+     * @param screen Visual Data
+     * @param x Weather position on x-axis
+     * @param y Weather position on y-axis
+     * @param cloud Weather sprite (image name)
+     */
+    public WeatherZone (GameScreen screen, float x, float y, String cloud) {
         super(screen, x, y);
         this.screen = screen;
         weatherTexture = new Texture(cloud); //fix later
-        //Set the position and size of the college
+
+        //Set the position and size of the Weather area
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(weatherTexture);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
         damage = 10; //?
-        int ranX = 0; //?
-        int ranY = 0; //?
 
-        //: Checks to see if any submerged rubble or powerups are in the area
+        //: Checks to see if any submerged rubble or powerups are in the area.
         //if so, will put them in the list 'floating' and will toggle them on
     }
 
 
     @Override
     public void onContact() {
-
+        
     }
 
 
