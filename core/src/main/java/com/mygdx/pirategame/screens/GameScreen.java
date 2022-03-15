@@ -347,7 +347,7 @@ public class GameScreen implements Screen {
         for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
         }
-        //After a delay check if a college is destroyed. If not, if can fire
+        //After a delay check if a college is destroyed. If not, it can fire
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
                 colleges.get("Anne Lister").fire();
