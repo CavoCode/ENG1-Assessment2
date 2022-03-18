@@ -34,8 +34,6 @@ public class WeatherZone extends Enemy{
      * public HealthBar bar;
     */
     
-    //: need new class Submerged which is a singular obstacle/powerup that can be toggled on/off
-    //public ArrayList<Submerged> floating = new ArrayList<>();
     public Texture weatherTexture;
 
 
