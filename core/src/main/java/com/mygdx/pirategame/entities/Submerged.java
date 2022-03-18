@@ -21,11 +21,11 @@ import java.util.ArrayList;
  *@version 1.0
  */
 public class Submerged {
-    public  ArrayList<Object> sunkenItems = new ArrayList<>(); //dont change
+    public  ArrayList<Object> sunkenItems = new ArrayList<>();
     public  ArrayList<Object> floatingItems = new ArrayList<>();
     //object is able to be (debris, powerups, ...)
 
-    
+
     /**
      * Initialises all of the submerged items and puts them into lists
      * The submerged items are at pre-set points that were decided before the game opens
@@ -37,22 +37,26 @@ public class Submerged {
 
 
     /**
-     * Take the item, activate it and adds it to the floating list 
+     * Takes the item, activates it and moves it from the sunkenList to the floatingList
      * @param sunkenItem a Debris or a powerup or other item
      */
     public void Rise(Object sunkenItem){
-        floatingItems.add(sunkenItem);
+        if (sunkenItems.contains(sunkenItem)){
+            floatingItems.add(sunkenItem);
+            sunkenItems.remove(sunkenItem);
+        }
         //activate sunkenItem
     }
 
 
     /**
-     * Take the item, de-activate it and removes it from the floating list 
-     * @param sunkenItem a Debris or powerup or other item
+     * Takes the item, de-activates it and moves it from the floatingList to the sunkenList
+     * @param floatingItem a Debris or powerup or other item
      */
-    public void Sink(Object sunkenItem){
-        if (floatingItems.contains(sunkenItem)){
-            floatingItems.remove(sunkenItem);
+    public void Sink(Object floatingItem){
+        if (floatingItems.contains(floatingItem)){
+            sunkenItems.add(floatingItem);
+            floatingItems.remove(floatingItem);
         }
         //deactivate sunken item
     }
