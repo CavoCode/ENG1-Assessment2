@@ -64,7 +64,14 @@ public class WeatherZone extends Enemy{
     //should theoretically lower the max speed of the ships in contact with it
     @Override
     public void onContact() {
-        //need to figure out
+        //Trigger weather effects on ships instead of causing a collision.
+        /*
+        : Give ships a 'DelayWeatherEffect' funct that, whilst active, has a 'two' 
+        second cooldown until it de-activates weather effects on itself. The cooldown 
+        is reset each time it comes into contact with the weather
+        : Give ships a 'TakeWeatherEffect' funct that, when activated, changes the stats
+        of the ship 
+        */
     }
 
 

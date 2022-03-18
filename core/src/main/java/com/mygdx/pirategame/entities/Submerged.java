@@ -12,6 +12,9 @@ import com.mygdx.pirategame.main.PirateGame;
 import java.util.ArrayList;
 
 //----------------------Needs debris/powerups to be completed first-----------------------------------------
+//stuff 'that' needs for this;
+//- Toggle on/off functionality
+//- Location on map
 
 /**
  * Submerged
@@ -31,7 +34,8 @@ public class Submerged {
      * The submerged items are at pre-set points that were decided before the game opens
      */
     public Submerged(){
-        //A list of every item being initialised into specific coordinates
+        //A list of every item being initialised into specific coordinates and put into the
+        //sunkenItems list
 
     }
 
