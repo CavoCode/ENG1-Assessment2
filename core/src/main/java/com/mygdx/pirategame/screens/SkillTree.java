@@ -34,10 +34,11 @@ public class SkillTree implements Screen {
     //To store whether buttons are enabled or disabled
     private static final List<Integer> states = new ArrayList<Integer>();
 
-    private static TextButton movement1;
-    private TextButton damage1;
-    private TextButton GoldMulti1;
-    private TextButton movement2;
+    //edited by Team 17-sabrina
+    private static TextButton HealHealth;
+    private TextButton CannonDamage;
+    private TextButton Acceleration;
+    private TextButton ExtraLives;
 
     /**
      * Instantiates a new Skill tree.
@@ -79,25 +80,25 @@ public class SkillTree implements Screen {
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
         //create skill tree buttons
-        movement1 = new TextButton("Movement Speed + 20%", skin);
+        HealHealth = new TextButton("Repair Ship + 20%", skin);
 
         //Sets enabled or disabled
         if (states.get(0) == 1){
-            movement1.setDisabled(true);
+            HealHealth.setDisabled(true);
         }
-        GoldMulti1 = new TextButton("Gold Multiplier x2", skin);
+        Acceleration = new TextButton("Increase Movement Speed + 20%", skin);
         if (states.get(1) == 1){
-            GoldMulti1.setDisabled(true);
+            Acceleration.setDisabled(true);
         }
-        movement2 = new TextButton("Movement Speed + 20%", skin);
+        ExtraLives = new TextButton("Reinforce Ships Hull + 20%", skin);
         if (states.get(2) == 1){
-            movement2.setDisabled(true);
+            ExtraLives.setDisabled(true);
         }
 
-        damage1 = new TextButton("Damage + 5", skin);
+        CannonDamage = new TextButton("Damage + 5", skin);
 
         if (states.get(3) == 1){
-            damage1.setDisabled(true);
+            CannonDamage.setDisabled(true);
 
         }
 
@@ -119,16 +120,16 @@ public class SkillTree implements Screen {
         });
 
         //add buttons and labels to main table
-        table.add(movement1);
+        table.add(HealHealth);
         table.add(unlock100);
         table.row().pad(10, 0, 10, 0);
-        table.add(GoldMulti1);
+        table.add(Acceleration);
         table.add(unlock200);
         table.row().pad(10, 0, 10, 0);
-        table.add(movement2);
+        table.add(ExtraLives);
         table.add(unlock300);
         table.row().pad(10, 0, 10, 0);
-        table.add(damage1);
+        table.add(CannonDamage);
         table.add(unlock400);
         table.top();
 
@@ -145,29 +146,27 @@ public class SkillTree implements Screen {
     public static void pointsCheck(int points){
 
         //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
-        if(states.get(0) == 1 && points >= 100){
+        if(states.get(0) == 1 && Coins >= 100){
+            Hud.changeHealth(10);
+            Hud.changeCoins(-100);
+            states.set(0, 0);
+        }
+        else if(states.get(1) == 1 && points >= 200){
             //Change acceleration
             GameScreen.changeAcceleration(20F);
             //Change Max speed
             GameScreen.changeMaxSpeed(20F);
-            states.set(0, 0);
-
-        }
-        else if(states.get(1) == 1 && points >= 200){
-            //Change multiplier
-            Hud.changeCoinsMulti(2);
+            Hud.changeCoins(-100);
             states.set(1, 0);
         }
         else if(states.get(2) == 1 && points >= 300){
-            //Change acceleration
-            GameScreen.changeAcceleration(20F);
-            //Change Max speed
-            GameScreen.changeMaxSpeed(20F);
+            Hud.changeCoins(-100);
             states.set(2, 0);
 
         }else if(states.get(3) == 1 && points >= 400){
             //Increase damage
             GameScreen.changeDamage(5);
+            Hud.changeCoins(-100);
             states.set(3, 0);
         }
     }
