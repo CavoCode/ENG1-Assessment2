@@ -27,7 +27,7 @@ public class Submerged {
     public  ArrayList<Object> sunkenItems = new ArrayList<>();
     public  ArrayList<Object> floatingItems = new ArrayList<>();
     //object is able to be (debris, powerups, ...)
-
+    //Later will be differentiated into seperated lists and Functions
 
     /**
      * Initialises all of the submerged items and puts them into lists

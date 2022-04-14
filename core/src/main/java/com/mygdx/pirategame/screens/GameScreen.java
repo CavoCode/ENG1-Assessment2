@@ -26,6 +26,10 @@ import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
+//---Team 17---
+import com.mygdx.pirategame.entities.WeatherZone;
+import com.mygdx.pirategame.entities.Submerged;
+//-------------
 
 import java.util.Random;
 
@@ -67,6 +71,10 @@ public class GameScreen implements Screen {
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
+    //---Team 17---
+    private WeatherZone weather;
+    private Submerged submerged;
+    //-------------
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
