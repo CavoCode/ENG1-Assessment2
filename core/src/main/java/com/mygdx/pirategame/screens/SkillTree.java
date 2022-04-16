@@ -103,10 +103,10 @@ public class SkillTree implements Screen {
         }
 
         //Point unlock labels
-        final Label unlock100 = new Label("100 points",skin);
-        final Label unlock200 = new Label("200 points",skin);
-        final Label unlock300 = new Label("300 points",skin);
-        final Label unlock400 = new Label("400 points",skin);
+        final Label unlock50 = new Label("$50",skin);
+        final Label unlock100 = new Label("$100",skin);
+        final Label unlock150 = new Label("$150",skin);
+        final Label unlock200 = new Label("$200",skin);
 
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
