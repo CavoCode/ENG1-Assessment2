@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -83,7 +84,7 @@ public class EnemyShip extends Enemy {
         }
 
         // below code is to move the ship to a coordinate (target)
-        //Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
+        //Vector2 target = screen.getPlayerPos();
         //target.sub(b2body.getPosition());
         //target.nor();
         //float speed = 1.5f;
