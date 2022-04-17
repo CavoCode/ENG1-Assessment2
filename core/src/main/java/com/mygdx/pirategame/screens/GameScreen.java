@@ -22,6 +22,7 @@ import com.mygdx.pirategame.interactive.WorldContactListener;
 import com.mygdx.pirategame.interactive.WorldCreator;
 import com.mygdx.pirategame.entities.AvailableSpawn;
 import com.mygdx.pirategame.entities.Coin;
+import com.mygdx.pirategame.entities.Powerup;
 import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.hud.Hud;
@@ -67,6 +68,10 @@ public class GameScreen implements Screen {
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
+    
+    private static ArrayList<Powerup> Powerups = new ArrayList<>();
+    private static long powerupActivatedTime;  //Used as common timer for all powerup instances so just has get and set methods
+    private static String powerupType;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -151,8 +156,22 @@ public class GameScreen implements Screen {
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
                 validLoc = checkGenPos(a, b);
             }
-            //Add a coins at the random coords
+            //Add a coin at the random coords
             Coins.add(new Coin(this, a, b));
+        }
+        
+        //Random powerups
+        Powerups = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            validLoc = false;
+            while (!validLoc) {
+                //Get random x and y coords
+                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+                validLoc = checkGenPos(a, b);
+            }
+            //Add a powerus at the random coords
+            Powerups.add(new Powerup(this, a, b));
         }
 
         //Setting stage
@@ -347,6 +366,14 @@ public class GameScreen implements Screen {
         for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
         }
+        
+        //Updates powerup
+        for (int i = 0; i < Powerups.size(); i++) {
+            Powerups.get(i).update();
+        }
+        
+        keepPowerupEffects();
+        
         //After a delay check if a college is destroyed. If not, if can fire
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
@@ -396,6 +423,11 @@ public class GameScreen implements Screen {
         //Renders coins
         for(int i=0;i<Coins.size();i++) {
             Coins.get(i).draw(game.batch);
+        }
+        
+      //Renders powerups
+        for(int i=0;i<Powerups.size();i++) {
+        	Powerups.get(i).draw(game.batch);
         }
 
         //Renders colleges
@@ -498,7 +530,7 @@ public class GameScreen implements Screen {
      *
      * @param percentage percentage increase
      */
-    public static void changeAcceleration(Float percentage){
+    public static void changeAcceleration(float percentage){
         accel = accel * (1 + (percentage / 100));
     }
 
@@ -507,9 +539,41 @@ public class GameScreen implements Screen {
      *
      * @param percentage percentage increase
      */
-    public static void changeMaxSpeed(Float percentage){
+    public static void changeMaxSpeed(float percentage){
         maxSpeed = maxSpeed * (1 +(percentage/100));
     }
+    
+    public static void setPowerupActivatedTime(long time) {
+    	powerupActivatedTime = time;
+    }
+    
+    public static long getPowerupActivatedTime() {
+    	return powerupActivatedTime;
+    }
+    
+    public static void setPowerupType(String type) {
+    	powerupType = type;
+    }
+    
+    private void keepPowerupEffects() {
+    	switch(powerupType) {
+    	case "Auto Reload":
+    		player.fire();
+    		break;
+    	case "Astral Body":
+    		player.turnOnAstral();
+    		break;
+    	case "Oil Spill":
+    		break;
+    	case "Rubber Coating":
+    		break;
+    	case "Soup":
+    		break;
+    	case "":
+    		player.turnOffAstral();
+    	}
+    }
+    
 
     /**
      * Changes the amount of damage done by each hit. Accessed by skill tree

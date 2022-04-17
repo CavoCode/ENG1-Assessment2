@@ -33,6 +33,7 @@ public class Hud implements Disposable {
     private static Label healthLabel;
     private static Label coinLabel;
     private static Label pointsText;
+    private static Label powerupTypeText;
     private static Integer coins;
     private static Integer coinMulti;
     private Image hpImg;
@@ -66,6 +67,7 @@ public class Hud implements Disposable {
         Table table1 = new Table(); //Counters
         Table table2 = new Table(); //Pictures or points label
         Table table3 = new Table(); //Background
+        Table table4 = new Table(); //Powerups
 
         table1.top().right();
         table1.setFillParent(true);
@@ -73,12 +75,16 @@ public class Hud implements Disposable {
         table2.setFillParent(true);
         table3.top().right();
         table3.setFillParent(true);
+        table4.top().center();
+        table4.setFillParent(true);
 
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
         pointsText = new Label("Points:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        powerupTypeText = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
+        table4.add(powerupTypeText).height(32).padBottom(90);
         table3.add(box).width(140).height(140).padBottom(15).padLeft(30);
         table2.add(hpImg).width(32).height(32).padTop(16).padRight(90);
         table2.row();
@@ -90,6 +96,7 @@ public class Hud implements Disposable {
         table1.add(coinLabel).padTop(20).top().right().padRight(40);
         table1.row();
         table1.add(scoreLabel).padTop(22).top().right().padRight(40);
+        stage.addActor(table4);
         stage.addActor(table3);
         stage.addActor(table2);
         stage.addActor(table1);
@@ -159,6 +166,15 @@ public class Hud implements Disposable {
      */
     public static void changeCoinsMulti(int value) {
         coinMulti = coinMulti * value;
+    }
+    
+    /**
+     * Changes Powerup Text - use empty string to make disappear
+     * 
+     * @param type the text to be displayed as the power up type
+     */
+    public static void setPowerupType(String type) {
+    	powerupTypeText.setText(type);
     }
 
     /**
