@@ -23,7 +23,7 @@ import com.mygdx.pirategame.main.PirateGame;
 public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
-    private final Vector2 orgCord;
+    private Vector2 orgCord;
     private Sound destroy;
     private Sound hit;
 
@@ -48,7 +48,6 @@ public class EnemyShip extends Enemy {
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
-        orgCord = b2body.getPosition();
         damage = 20;
     }
 
@@ -83,25 +82,14 @@ public class EnemyShip extends Enemy {
         if(health <= 0) {
             setToDestroy = true;
         }
-
-        //Team17 Start of Change - Ai tracking
-        Vector2 target = screen.getPlayerPos();
-        if ((target.x <= b2body.getPosition().x - 30 && target.x >= b2body.getPosition().x + 30) && (target.y <= b2body.getPosition().y - 30 && target.y >= b2body.getPosition().y + 30)) {
-        	target.sub(b2body.getPosition());
-            target.nor();
-            float speed = 1.5f;
-            b2body.setLinearVelocity(target.scl(speed));
-        }
+        //Team17 Start of Change
         else {
-        	if(b2body.getPosition() != orgCord) {
-        		orgCord.sub(b2body.getPosition());
-        		orgCord.nor();
-                float speed = 1.5f;
-                b2body.setLinearVelocity(orgCord.scl(speed));
-        	}
+        	//System.out.println(orgCord);
+        	aiTracking();
         }
-       
-    }
+   }
+       //Team17 End of Change
+    
 
     /**
      * Constructs the ship batch
@@ -126,6 +114,7 @@ public class EnemyShip extends Enemy {
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
+        orgCord = new Vector2(getX(), getY());
         b2body = world.createBody(bdef);
 
         //Sets collision boundaries
@@ -139,6 +128,7 @@ public class EnemyShip extends Enemy {
         fdef.shape = shape;
         fdef.restitution = 0.7f;
         b2body.createFixture(fdef).setUserData(this);
+        
     }
 
     /**
@@ -158,6 +148,24 @@ public class EnemyShip extends Enemy {
         Hud.changePoints(5);
     }
 
+    //Team17 Start of Change - Ai idle movement
+    
+    private void aiTracking() {
+    	if(college != "Alcuin") {
+	    	Vector2 target = screen.getPlayerPos();
+	        if ((target.x >= b2body.getPosition().x - 3 && target.x <= b2body.getPosition().x + 3) && (target.y >= b2body.getPosition().y - 3 && target.y <= b2body.getPosition().y + 3)) {
+	        	target.sub(b2body.getPosition());
+	            target.nor();
+	            float speed = 1f;
+	            b2body.setLinearVelocity(target.scl(speed));
+	        }
+	        else {
+
+        	}
+        }
+	}
+    
+    //Team17 End of Change
     /**
      * Updates the ship image. Particuarly change texture on college destruction
      *

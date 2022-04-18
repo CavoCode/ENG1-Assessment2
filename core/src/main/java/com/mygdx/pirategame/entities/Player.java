@@ -71,8 +71,6 @@ public class Player extends Sprite {
             if(ball.isDestroyed())
                 cannonBalls.removeValue(ball, true);
         }
-        
-        System.out.println(b2body.getPosition());
     }
 
     /**
@@ -151,7 +149,7 @@ public class Player extends Sprite {
     	if (x == 0 && y == 0) {
     		//doesn't calculate a new angle so the ship stays pointing in the same direction when slowing down
     		//technically not pointing in the same direction as movement but speeds or difference are so small no-one can tell
-    		System.out.println(linx);
+    		//System.out.println(linx);
     	}
     	else {
     		//calculates angle that the ship is pointing in
