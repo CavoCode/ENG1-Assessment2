@@ -24,6 +24,7 @@ public class Hud implements Disposable {
 
     private float timeCount;
     private static Integer score;
+    private static Integer MaxHealth;
     private static Integer health;
     private Texture hp;
     private Texture boxBackground;
@@ -124,7 +125,7 @@ public class Hud implements Disposable {
      * @param value increase the maximum health
       */
     public static void changeMaxHealth(int value) {
-        MaxHealth += value
+        MaxHealth += value;
     }
     /**
      * Changes health by value increase

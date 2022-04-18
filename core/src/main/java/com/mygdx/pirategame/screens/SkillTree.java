@@ -103,10 +103,10 @@ public class SkillTree implements Screen {
         }
 
         //Point unlock labels
-        final Label unlock50 = new Label("$50",skin);
-        final Label unlock100 = new Label("$100",skin);
-        final Label unlock150 = new Label("$150",skin);
-        final Label unlock200 = new Label("$200",skin);
+        final Label unlock5 = new Label("$5",skin);
+        final Label unlock10 = new Label("$10",skin);
+        final Label unlock15 = new Label("$15",skin);
+        final Label unlock20 = new Label("$20",skin);
 
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
@@ -121,16 +121,16 @@ public class SkillTree implements Screen {
 
         //add buttons and labels to main table
         table.add(HealHealth);
-        table.add(unlock100);
-        table.row().pad(10, 0, 10, 0);
+        table.add(unlock5);
+        table.row().pad(10, 0, 10, 0).center();
         table.add(Acceleration);
-        table.add(unlock200);
+        table.add(unlock10);
         table.row().pad(10, 0, 10, 0);
         table.add(ExtraLives);
-        table.add(unlock300);
+        table.add(unlock15);
         table.row().pad(10, 0, 10, 0);
         table.add(CannonDamage);
-        table.add(unlock400);
+        table.add(unlock20);
         table.top();
 
         //add return button
@@ -146,9 +146,9 @@ public class SkillTree implements Screen {
     public static void pointsCheck(int points){
 
         //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
-        if(states.get(0) == 1 && Coins >= 100){
+        if(states.get(0) == 1 && points >= 200){
             Hud.changeHealth(10);
-            Hud.changeCoins(-100);
+            Hud.changeCoins(-5);
             states.set(0, 0);
         }
         else if(states.get(1) == 1 && points >= 200){
@@ -156,17 +156,17 @@ public class SkillTree implements Screen {
             GameScreen.changeAcceleration(20F);
             //Change Max speed
             GameScreen.changeMaxSpeed(20F);
-            Hud.changeCoins(-100);
+            Hud.changeCoins(-10);
             states.set(1, 0);
         }
-        else if(states.get(2) == 1 && points >= 300){
-            Hud.changeCoins(-100);
+        else if(states.get(2) == 1 && points >= 200){
+            Hud.changeCoins(-20);
             states.set(2, 0);
 
-        }else if(states.get(3) == 1 && points >= 400){
+        }else if(states.get(3) == 1 && points >= 150 ){
             //Increase damage
             GameScreen.changeDamage(5);
-            Hud.changeCoins(-100);
+            Hud.changeCoins(-15);
             states.set(3, 0);
         }
     }
