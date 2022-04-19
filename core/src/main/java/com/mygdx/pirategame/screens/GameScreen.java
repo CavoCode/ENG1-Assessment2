@@ -170,7 +170,7 @@ public class GameScreen implements Screen {
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
                 validLoc = checkGenPos(a, b);
             }
-            //Add a powerus at the random coords
+            //Add a powerups at the random coords
             Powerups.add(new Powerup(this, a, b));
         }
 
@@ -566,11 +566,13 @@ public class GameScreen implements Screen {
     	case "Oil Spill":
     		break;
     	case "Rubber Coating":
+    		player.turnOnRubber();
     		break;
     	case "Soup":
     		break;
     	case "":
     		player.turnOffAstral();
+    		player.turnOffRubber();
     	}
     }
     

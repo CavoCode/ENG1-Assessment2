@@ -30,6 +30,7 @@ public class Player extends Sprite {
     private float angle;
     private boolean astral;
     private Vector2 astralPos;
+    public static boolean rubber;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -219,6 +220,65 @@ public class Player extends Sprite {
         	// Defines a players position
             BodyDef bdef = new BodyDef();
             bdef.position.set(astralPos.x , astralPos.y);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
+
+            // Defines a player's shape and contact borders
+            FixtureDef fdef = new FixtureDef();
+            CircleShape shape = new CircleShape();
+            shape.setRadius(55 / PirateGame.PPM);
+
+            // setting BIT identifier
+            fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+
+            // determining what this BIT can collide with
+            fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.POWERUP_BIT;
+            fdef.shape = shape;
+            b2body.createFixture(fdef).setUserData(this);
+            b2body.setLinearVelocity(vel);
+    	}
+    }
+    
+    public void turnOnRubber() {
+    	if (!rubber) {
+    		rubber = true;
+    		
+    		Vector2 vel = b2body.getLinearVelocity();
+        	Vector2 pos = b2body.getPosition();
+    		
+        	// Defines a players position
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(pos.x , pos.y);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
+
+            // Defines a player's shape and contact borders
+            FixtureDef fdef = new FixtureDef();
+            fdef.restitution = 3f;
+            CircleShape shape = new CircleShape();
+            shape.setRadius(55 / PirateGame.PPM);
+
+            // setting BIT identifier
+            fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+
+            // determining what this BIT can collide with
+            fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.POWERUP_BIT;
+            fdef.shape = shape;
+            b2body.createFixture(fdef).setUserData(this);
+            b2body.setLinearVelocity(vel);
+    	}
+    }
+    
+    public void turnOffRubber() {
+    	if (rubber) {
+    		rubber = false;
+
+    		Vector2 vel = b2body.getLinearVelocity();
+        	Vector2 pos = b2body.getPosition();
+    		
+        	// Defines a players position
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(pos.x , pos.y);
             bdef.type = BodyDef.BodyType.DynamicBody;
             b2body = world.createBody(bdef);
 
