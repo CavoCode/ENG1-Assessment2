@@ -35,10 +35,13 @@ public class SkillTree implements Screen {
     private static final List<Integer> states = new ArrayList<Integer>();
 
     //edited by Team 17-sabrina
+    //create labels for powerups
     private static TextButton HealHealth;
     private TextButton CannonDamage;
     private TextButton Acceleration;
     private TextButton ExtraLives;
+    private TextButton GoldMultiplier;
+    
 
     /**
      * Instantiates a new Skill tree.
@@ -55,6 +58,7 @@ public class SkillTree implements Screen {
         states.add(1);
         states.add(1);
         states.add(1);
+        states.add(1);
     }
     /**
      * What should be displayed on the skill tree screen
@@ -66,6 +70,7 @@ public class SkillTree implements Screen {
         Gdx.input.setInputProcessor(stage);
         // Create a table that fills the screen
         Table table = new Table();
+        table.center();
         table.setFillParent(true);
         stage.addActor(table);
 
@@ -79,35 +84,78 @@ public class SkillTree implements Screen {
         //The skin for the actors
         Skin skin = new Skin(Gdx.files.internal("skin\\uiskin.json"));
 
-        //create skill tree buttons
-        HealHealth = new TextButton("Repair Ship + 20%", skin);
-
-        //Sets enabled or disabled
+        //create skill tree labels
+        HealHealth = new TextButton("Repair Ship + 20%", skin);  
         if (states.get(0) == 1){
             HealHealth.setDisabled(true);
         }
-        Acceleration = new TextButton("Increase Movement Speed + 20%", skin);
-        if (states.get(1) == 1){
+        HealHealth.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	Hud.changeHealth(20);
+            	
+            }
+        });
+
+        Acceleration = new TextButton("Increase Speed + 20%", skin);  
+        //Set enabled. if 1 locked if 0 unlocked
+        if (states.get(0) == 1){
             Acceleration.setDisabled(true);
         }
+        Acceleration.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	//Change acceleration
+                GameScreen.changeAcceleration(20F);
+                //Change Max speed
+                GameScreen.changeMaxSpeed(20F);
+                Hud.changeCoins(-10);
+            }
+        });
+
         ExtraLives = new TextButton("Reinforce Ships Hull + 20%", skin);
         if (states.get(2) == 1){
             ExtraLives.setDisabled(true);
         }
+        ExtraLives.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	Hud.changeMaxHealth(10);
+            	Hud.changeCoins(-10);
+            }
+        });
 
         CannonDamage = new TextButton("Damage + 5", skin);
-
         if (states.get(3) == 1){
             CannonDamage.setDisabled(true);
-
         }
+        CannonDamage.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	GameScreen.changeDamage(5);
+            	Hud.changeCoins(-5);
+            }
+        });
+        GoldMultiplier = new TextButton("Gold Multiplier x2", skin);  
+        if (states.get(4) == 1){
+        	GoldMultiplier.setDisabled(true);
+        }
+        GoldMultiplier.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+            	 //change gold multiplier 
+            	Hud.changeCoinsMulti(2);
+            	Hud.changeCoins(-50);
+            }
+        });
 
         //Point unlock labels
-        final Label unlock5 = new Label("$5",skin);
-        final Label unlock10 = new Label("$10",skin);
-        final Label unlock15 = new Label("$15",skin);
-        final Label unlock20 = new Label("$20",skin);
-
+        final Label unlock25 = new Label("$25",skin);
+        final Label unlock50 = new Label("$50",skin);
+        final Label unlock75 = new Label("$75",skin);
+        final Label unlock100 = new Label("$100",skin);
+        
+        
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
 
@@ -121,17 +169,21 @@ public class SkillTree implements Screen {
 
         //add buttons and labels to main table
         table.add(HealHealth);
-        table.add(unlock5);
-        table.row().pad(10, 0, 10, 0).center();
+        table.add(unlock25);
+        table.row().pad(10, 0, 10, 0);
         table.add(Acceleration);
-        table.add(unlock10);
+        table.add(unlock50);
         table.row().pad(10, 0, 10, 0);
         table.add(ExtraLives);
-        table.add(unlock15);
+        table.add(unlock75);
         table.row().pad(10, 0, 10, 0);
         table.add(CannonDamage);
-        table.add(unlock20);
-        table.top();
+        table.add(unlock100);
+        table.row().pad(10, 0, 10, 0);
+        table.add(GoldMultiplier);
+        table.add(unlock100);
+        table.row().pad(10, 0, 10, 0);
+        table.center();
 
         //add return button
         Other.add(backButton);
@@ -144,32 +196,22 @@ public class SkillTree implements Screen {
      * @param points the current amount of points
      */
     public static void pointsCheck(int points){
+    	        //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
+    	        if(states.get(0) == 1 && points >= 25 && Hud.getCoins() >= 5){
+    	            states.set(0, 0);
+    	        }
+    	        else if(states.get(1) == 1 && points >= 50 && Hud.getCoins() >= 10){
+    	            states.set(1, 0);
+    	        }
+    	        else if(states.get(2) == 1 && points >= 15 && Hud.getCoins() >= 10){
+    	            states.set(2, 0);
+    	        }else if(states.get(3) == 1 && points >= 10 && Hud.getCoins() >= 5){
+    	            states.set(3, 0);
+    	        }else if(states.get(4) == 1 && points >= 100 && Hud.getCoins() >= 25){
+    	            states.set(4, 0);
+    	        }
+    	    }
 
-        //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
-        if(states.get(0) == 1 && points >= 200){
-            Hud.changeHealth(10);
-            Hud.changeCoins(-5);
-            states.set(0, 0);
-        }
-        else if(states.get(1) == 1 && points >= 200){
-            //Change acceleration
-            GameScreen.changeAcceleration(20F);
-            //Change Max speed
-            GameScreen.changeMaxSpeed(20F);
-            Hud.changeCoins(-10);
-            states.set(1, 0);
-        }
-        else if(states.get(2) == 1 && points >= 200){
-            Hud.changeCoins(-20);
-            states.set(2, 0);
-
-        }else if(states.get(3) == 1 && points >= 150 ){
-            //Increase damage
-            GameScreen.changeDamage(5);
-            Hud.changeCoins(-15);
-            states.set(3, 0);
-        }
-    }
 
     /**
      * Renders the visual data for all objects
