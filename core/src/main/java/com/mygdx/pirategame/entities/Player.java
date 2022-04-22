@@ -14,7 +14,7 @@ import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Creates the class of the player. Everything that involves actions coming from the player boat
- * @author Ethan Alabaster, Edward Poulter
+ * @author Ethan Alabaster, Edward Poulter, Zac Spooner
  * @version 1.0
  */
 public class Player extends Sprite {
@@ -24,11 +24,10 @@ public class Player extends Sprite {
     public Body b2body;
     private Sound breakSound;
     private Array<CannonFire> cannonBalls;
-    private static float dragFactor = 1.0f;
+    public static float dragFactor = 1.0f;
     private static float maxSpeed = 5.0f + dragFactor;
     private static float accel = 0.05f;
     private float angle;
-    //private static float sin45 = 0.7f;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -61,8 +60,6 @@ public class Player extends Sprite {
      */
     public void update(float dt) {
         // Updates position and orientation of player
-    	float speed = findSpeed(b2body.getLinearVelocity().x, b2body.getLinearVelocity().y);
-    	//System.out.println(speed);
         setPosition(b2body.getPosition().x - getWidth() / 2f, b2body.getPosition().y - getHeight() / 2f);
         //float angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
         b2body.setTransform(b2body.getWorldCenter(), angle - ((float)Math.PI) / 2.0f);
@@ -74,6 +71,8 @@ public class Player extends Sprite {
             if(ball.isDestroyed())
                 cannonBalls.removeValue(ball, true);
         }
+        
+        System.out.println(b2body.getPosition());
     }
 
     /**
@@ -127,39 +126,55 @@ public class Player extends Sprite {
          */
     }
     
+    /**
+     * Applies a force to player b2body according to x and y components.
+     * May result in faster speeds diagonally than orthogonally as drag works on scalars but we have to use velocity components
+     * @param x The x component of the force should be -1,0 or 1 but can be any integer
+     * @param y The y component of the force should be -1,0 or 1 but can be any integer
+     */
     public void applyImpuse(int x,int y) {
-    	//float rotation = b2body.getAngle();
-    	//Vector2 position = b2body.getPosition();
     	
+    	//finds current x and y components
     	float linx = b2body.getLinearVelocity().x;
     	float liny = b2body.getLinearVelocity().y;
-    	float deltalinx = (x * accel);
-    	float deltaliny = (y * accel);
-    	linx += deltalinx;
-    	liny += deltaliny;
-    	//float newSpeed = findSpeed(linx,liny);
-    	//drag = calcDrag(newSpeed);
+    	
+    	//finds pre-drag velocity for x and y components
+    	linx += (x * accel);
+    	liny += (y * accel);
+    	
+    	//applies drag velocity penalty
     	linx = calcDrag(linx);
     	liny = calcDrag(liny);
-    	//linx = b2body.getLinearVelocity().x + deltalinx;
-    	//liny = b2body.getLinearVelocity().y + deltaliny;
+    	
     	b2body.setLinearVelocity(linx, liny);
     	
-    	//System.out.println(b2body.getAngularDamping());
     	if (x == 0 && y == 0) {
+    		//doesn't calculate a new angle so the ship stays pointing in the same direction when slowing down
+    		//technically not pointing in the same direction as movement but speeds or difference are so small no-one can tell
     		System.out.println(linx);
     	}
     	else {
+    		//calculates angle that the ship is pointing in
     		angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
     	}
     }
     
+    /**
+     * Calculates the speed after drag has been applied to it.
+     * @param speed The pre-drag speed
+     * @return The new speed (should be lower the original or 0)
+     */
     private float calcDrag(float speed) {
+    	//fairly simple drag simulation by getting a proportion of max speed but with correct proportionality
     	double drag = (Math.pow(speed, 2) / Math.pow(maxSpeed, 3));
-    	drag = drag * dragFactor + dragFactor/1000;
+    	//adds dragFactor constant so it still slows down at low speeds 
+    	drag = drag * dragFactor + dragFactor/1001;
+    	//stops weird movement caused by constant dragFactor by flooring speed
     	if (drag < dragFactor/1000 && drag > -dragFactor/1000) {
+    		speed = 0;
     		drag = 0;
     	}
+    	//takes magnitude away from negative speeds rather than adding it
     	if (speed > 0) {
     		return (float) (speed - drag);
     	}
@@ -168,9 +183,11 @@ public class Player extends Sprite {
     	}
     }
     
+    /*
     private float findSpeed(float x, float y) {
     	return (float) (Math.pow(x, 2) + Math.pow(y, 2));
     }
+    */
 
     /**
      * Draws the player using batch

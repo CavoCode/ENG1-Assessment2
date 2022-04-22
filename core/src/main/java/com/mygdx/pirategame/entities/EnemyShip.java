@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -22,6 +23,7 @@ import com.mygdx.pirategame.main.PirateGame;
 public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
+    private final Vector2 orgCord;
     private Sound destroy;
     private Sound hit;
 
@@ -46,7 +48,7 @@ public class EnemyShip extends Enemy {
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
-
+        orgCord = b2body.getPosition();
         damage = 20;
     }
 
@@ -82,12 +84,23 @@ public class EnemyShip extends Enemy {
             setToDestroy = true;
         }
 
-        // below code is to move the ship to a coordinate (target)
-        //Vector2 target = new Vector2(960 / PirateGame.PPM, 2432 / PirateGame.PPM);
-        //target.sub(b2body.getPosition());
-        //target.nor();
-        //float speed = 1.5f;
-        //b2body.setLinearVelocity(target.scl(speed));
+        //Team17 Start of Change - Ai tracking
+        Vector2 target = screen.getPlayerPos();
+        if ((target.x <= b2body.getPosition().x - 30 && target.x >= b2body.getPosition().x + 30) && (target.y <= b2body.getPosition().y - 30 && target.y >= b2body.getPosition().y + 30)) {
+        	target.sub(b2body.getPosition());
+            target.nor();
+            float speed = 1.5f;
+            b2body.setLinearVelocity(target.scl(speed));
+        }
+        else {
+        	if(b2body.getPosition() != orgCord) {
+        		orgCord.sub(b2body.getPosition());
+        		orgCord.nor();
+                float speed = 1.5f;
+                b2body.setLinearVelocity(orgCord.scl(speed));
+        	}
+        }
+       
     }
 
     /**

@@ -187,11 +187,12 @@ public class AssetTesting {
     }
     
     //SOUNDS ASSETS
+    //would change the naming system to make it consistent but it would break a lot of things
     
     @Test
     public void coinPickupExists() {
         assertTrue("does coinPickup.mp3 asset exist", Gdx.files
-                .internal("sounds/coinPickup.mp3").exists());
+                .internal("sounds/coin-pickup.mp3").exists());
     }
     
     @Test
@@ -203,24 +204,24 @@ public class AssetTesting {
     @Test
     public void pirateMusic() {
         assertTrue("does pirateMusic.mp3 asset exist", Gdx.files
-                .internal("sounds/pirateMusic.mp3").exists());
+                .internal("sounds/pirate-music.mp3").exists());
     }
     
     @Test
     public void shipExplosionExists() {
         assertTrue("does shipExplosion.wav asset exist", Gdx.files
-                .internal("sounds/shipExplosion.wav3").exists());
+                .internal("sounds/ship-explosion-2.wav").exists());
     }
     
     @Test
     public void shipHit() {
         assertTrue("does shipHit.wav asset exist", Gdx.files
-                .internal("sounds/shipHit.wav").exists());
+                .internal("sounds/ship-hit.wav").exists());
     }
     
     @Test
     public void woodBumpExists() {
         assertTrue("does woodBump.mp3 asset exist", Gdx.files
-                .internal("sounds/woodBump.mp3").exists());
+                .internal("sounds/wood-bump.mp3").exists());
     }
 }

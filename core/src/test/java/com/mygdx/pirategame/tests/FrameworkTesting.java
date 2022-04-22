@@ -10,15 +10,13 @@ public class FrameworkTesting {
 
     @Test
     public void shouldBeTrue() {
-        //assertTrue("This test will only pass when the ship.png asset exists.", Gdx.files
-        //        .internal("ship.png").exists());
-	assertTrue(true);
+    	assertTrue(true);
     }
     
+    /*   Tests if framework is running properly (uncomment to make sure it can fail)
     @Test
     public void shouldBeFalse() {
-        //assertTrue("This test will only pass when the ship.png asset exists.", Gdx.files
-        //        .internal("ship.png").exists());
-	assertTrue(false);
+    	assertTrue(false);
     }
+    */
 }
