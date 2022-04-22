@@ -26,10 +26,6 @@ import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
-//---Team 17---
-import com.mygdx.pirategame.entities.WeatherZone;
-import com.mygdx.pirategame.entities.Submerged;
-//-------------
 
 import java.util.Random;
 
@@ -71,10 +67,6 @@ public class GameScreen implements Screen {
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
-    //---Team 17---
-    private WeatherZone weather;
-    private Submerged submerged;
-    //-------------
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -160,7 +152,7 @@ public class GameScreen implements Screen {
                 validLoc = checkGenPos(a, b);
             }
             //Add a coins at the random coords
-            Coins.add(new Coin(this, a, b));
+            Coins.add(new Coin(this, a, b, true));
         }
 
         //Setting stage
@@ -587,5 +579,28 @@ public class GameScreen implements Screen {
         b2dr.dispose();
         hud.dispose();
         stage.dispose();
+    }
+
+    /**
+     * Enacts the entire weather event (currently just holding snippets of code)
+     */
+    public void weather() {
+        
+        //Turns off all coins
+        for (int i = 0; i < Coins.size(); i++){
+            Coins.get(i).setVisible(false);
+        }
+        //Turns on all coins
+        for (int i = 0; i < Coins.size(); i++){
+            Coins.get(i).setVisible(true);
+        }
+
+        //Player De-buffs (speed and accel)
+        changeAcceleration(-15F);
+        changeMaxSpeed(-15F);
+
+        //Player Re-buffs (speed and accel)
+        changeAcceleration(15F);
+        changeMaxSpeed(15F);
     }
 }

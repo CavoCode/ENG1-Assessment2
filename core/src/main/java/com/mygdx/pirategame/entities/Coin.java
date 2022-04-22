@@ -16,11 +16,16 @@ import com.mygdx.pirategame.main.PirateGame;
  * Creates an object for each coin
  * Extends the entity class to define coin as an entity
  *
- *@author Joe Dickinson
- *@version 1.0
+ *@author Joe Dickinson, Josh Saunders
+ *@version 2.0
  */
 public class Coin extends Entity {
     private Texture coin;
+    //Team17--
+    private Texture none;
+    private Boolean floating;
+    private Boolean sunken;
+    //--------
     private boolean setToDestroyed;
     private boolean destroyed;
     private Sound coinPickup;
@@ -31,11 +36,20 @@ public class Coin extends Entity {
      * @param screen the screen its going onto
      * @param x      the x value to be placed at
      * @param y      the y value to be placed at
+     * @param sunken whether it is a submerged coin or not (true=it is)
      */
-    public Coin(GameScreen screen, float x, float y) {
+    public Coin(GameScreen screen, float x, float y, Boolean sunken) {
         super(screen, x, y);
+
+        //Team 17--
+        this.floating = true;
+        this.sunken = sunken;
+        //---------
+
         //Set coin image
         coin = new Texture("coin.png");
+        //Team17 - Set blank image
+        none = new Texture("w.png"); //Make this null.png image, but null.png being a transparent image
         //Set the position and size of the coin
         setBounds(0,0,48 / PirateGame.PPM, 48 / PirateGame.PPM);
         //Set the texture
@@ -89,14 +103,17 @@ public class Coin extends Entity {
      */
     @Override
     public void entityContact() {
-        //Add a coin
-        Hud.changeCoins(1);
-        //Set to destroy
-        setToDestroyed = true;
-        Gdx.app.log("coin", "collision");
-        //Play pickup sound
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-            coinPickup.play(screen.game.getPreferences().getEffectsVolume());
+        //Team 17 - Checks if coin is submerged
+        if (floating == true){
+            //Add a coin
+            Hud.changeCoins(1);
+            //Set to destroy
+            setToDestroyed = true;
+            Gdx.app.log("coin", "collision");
+            //Play pickup sound
+            if (screen.game.getPreferences().isEffectsEnabled()) {
+                coinPickup.play(screen.game.getPreferences().getEffectsVolume());
+            }
         }
 
     }
@@ -109,6 +126,26 @@ public class Coin extends Entity {
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
+        }
+    }
+
+    /**
+     * Team 17
+     * Defines whether the coin is there or invisible / un-interactable
+     * @param bool true = coin is there, false = coin is underwater (not there)
+     */
+    public void setVisible(Boolean bool){
+        //Checks if this coin is able to sink
+        if (sunken){
+            floating = bool;
+            if (!bool){
+                //changes texture to a transparent texture
+                setRegion(none);
+            }
+            else{
+                //changes texture to a coin texture
+                setRegion(coin);
+            }
         }
     }
 }

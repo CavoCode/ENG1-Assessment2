@@ -115,6 +115,8 @@ public class Hud implements Disposable {
 
             //Check if a points boundary is met
             SkillTree.pointsCheck(score);
+
+            //TEAM 17--Remove a second each second (weather timer)
         }
     }
 
