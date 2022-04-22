@@ -48,8 +48,8 @@ public class Coin extends Entity {
 
         //Set coin image
         coin = new Texture("coin.png");
-        //Team17 - Set blank image
-        none = new Texture("w.png"); //Make this null.png image, but null.png being a transparent image
+        //Team 17 - Set blank image
+        none = new Texture("null.png");
         //Set the position and size of the coin
         setBounds(0,0,48 / PirateGame.PPM, 48 / PirateGame.PPM);
         //Set the texture

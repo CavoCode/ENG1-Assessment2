@@ -154,6 +154,9 @@ public class GameScreen implements Screen {
             //Add a coins at the random coords
             Coins.add(new Coin(this, a, b, true));
         }
+        for (int i = 0; i < Coins.size()/2; i++){
+            Coins.get(i).setVisible(false);
+        }
 
         //Setting stage
         stage = new Stage(new ScreenViewport());
@@ -305,6 +308,22 @@ public class GameScreen implements Screen {
             if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
                 player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
             }*/
+
+            //TEST INPUTS KEY TEAM 17-------
+            //Sinks any sinkable objects
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                for (int i = 0; i < Coins.size(); i++){
+                    Coins.get(i).setVisible(false);
+                }
+            }
+            //Rises any risable objects
+            if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+                for (int i = 0; i < Coins.size(); i++){
+                    Coins.get(i).setVisible(true);
+                }
+            }
+            //------------------------------
+
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if(gameStatus == GAME_PAUSED) {
