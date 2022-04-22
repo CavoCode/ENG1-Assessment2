@@ -152,7 +152,10 @@ public class GameScreen implements Screen {
                 validLoc = checkGenPos(a, b);
             }
             //Add a coins at the random coords
-            Coins.add(new Coin(this, a, b));
+            Coins.add(new Coin(this, a, b, true));
+        }
+        for (int i = 0; i < Coins.size()/2; i++){
+            Coins.get(i).setVisible(false);
         }
 
         //Setting stage
@@ -305,6 +308,22 @@ public class GameScreen implements Screen {
             if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
                 player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
             }*/
+
+            //TEST INPUTS KEY TEAM 17-------
+            //Sinks any sinkable objects
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                for (int i = 0; i < Coins.size(); i++){
+                    Coins.get(i).setVisible(false);
+                }
+            }
+            //Rises any risable objects
+            if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+                for (int i = 0; i < Coins.size(); i++){
+                    Coins.get(i).setVisible(true);
+                }
+            }
+            //------------------------------
+
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if(gameStatus == GAME_PAUSED) {
@@ -347,7 +366,7 @@ public class GameScreen implements Screen {
         for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
         }
-        //After a delay check if a college is destroyed. If not, if can fire
+        //After a delay check if a college is destroyed. If not, it can fire
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
                 colleges.get("Anne Lister").fire();
@@ -579,5 +598,28 @@ public class GameScreen implements Screen {
         b2dr.dispose();
         hud.dispose();
         stage.dispose();
+    }
+
+    /**
+     * Enacts the entire weather event (currently just holding snippets of code)
+     */
+    public void weather() {
+        
+        //Turns off all coins
+        for (int i = 0; i < Coins.size(); i++){
+            Coins.get(i).setVisible(false);
+        }
+        //Turns on all coins
+        for (int i = 0; i < Coins.size(); i++){
+            Coins.get(i).setVisible(true);
+        }
+
+        //Player De-buffs (speed and accel)
+        changeAcceleration(-15F);
+        changeMaxSpeed(-15F);
+
+        //Player Re-buffs (speed and accel)
+        changeAcceleration(15F);
+        changeMaxSpeed(15F);
     }
 }

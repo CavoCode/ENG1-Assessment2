@@ -28,6 +28,7 @@ public class Hud implements Disposable {
     private Texture hp;
     private Texture boxBackground;
     private Texture coinPic;
+    private Texture weatherHud; //Team 17
 
     private static Label scoreLabel;
     private static Label healthLabel;
@@ -38,6 +39,7 @@ public class Hud implements Disposable {
     private Image hpImg;
     private Image box;
     private Image coin;
+    private Image weather; //Team 17
 
     /**
      * Retrieves information and displays it in the hud
@@ -93,6 +95,20 @@ public class Hud implements Disposable {
         stage.addActor(table3);
         stage.addActor(table2);
         stage.addActor(table1);
+
+        //Team 17-----
+        weatherHud = new Texture("hud/weathering.png"); 
+        weather = new Image(weatherHud);
+        weather.setFillParent(true);
+
+        Table weatherTable = new Table();
+        weatherTable.top().right();
+        weatherTable.setFillParent(true);
+
+        weatherTable.add(weather);
+        //setVisible here
+        stage.addActor(weather);
+        //------------
     }
 
     /**
@@ -115,6 +131,8 @@ public class Hud implements Disposable {
 
             //Check if a points boundary is met
             SkillTree.pointsCheck(score);
+
+            //TEAM 17--Remove a second each second (weather timer)
         }
     }
 
