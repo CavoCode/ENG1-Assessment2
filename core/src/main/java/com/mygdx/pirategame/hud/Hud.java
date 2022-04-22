@@ -97,7 +97,7 @@ public class Hud implements Disposable {
         stage.addActor(table1);
 
         //Team 17--
-        weatherHud = new Texture("hud/weather.png"); 
+        weatherHud = new Texture("hud/weathering.png"); 
         weather = new Image(weatherHud);
         weather.setFillParent(true);
 
