@@ -24,6 +24,7 @@ public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
     private Vector2 orgCord;
+    private boolean moved = false;
     private Sound destroy;
     private Sound hit;
 
@@ -39,6 +40,7 @@ public class EnemyShip extends Enemy {
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
+        orgCord = new Vector2(x, y);
         //Assign college
         college = assignment;
         //Set audios
@@ -114,7 +116,6 @@ public class EnemyShip extends Enemy {
         BodyDef bdef = new BodyDef();
         bdef.position.set(getX(), getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
-        orgCord = new Vector2(getX(), getY());
         b2body = world.createBody(bdef);
 
         //Sets collision boundaries
@@ -158,12 +159,25 @@ public class EnemyShip extends Enemy {
 	            target.nor();
 	            float speed = 1f;
 	            b2body.setLinearVelocity(target.scl(speed));
+	            moved = true;
 	        }
-	        else {
-
+	        
+        	if(moved) {
+        		returnToCord();
+        		if (b2body.getPosition().x == orgCord.x && b2body.getPosition().y == orgCord.y) {
+        			moved = false;
+        		}
         	}
+	        
         }
 	}
+    
+    private void returnToCord() {
+    	orgCord.sub(b2body.getPosition());
+		orgCord.nor();
+        float speed = 0.5f;
+        b2body.setLinearVelocity(orgCord.scl(speed));
+    }
     
     //Team17 End of Change
     /**
