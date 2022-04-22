@@ -99,6 +99,7 @@ public class Hud implements Disposable {
         //Team 17-----
         weatherHud = new Texture("hud/weathering.png"); 
         weather = new Image(weatherHud);
+        weather.setFillParent(true);
 
         Table weatherTable = new Table();
         weatherTable.top().right();
