@@ -16,14 +16,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.*;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.interactive.WorldContactListener;
 import com.mygdx.pirategame.interactive.WorldCreator;
 import com.mygdx.pirategame.entities.AvailableSpawn;
 import com.mygdx.pirategame.entities.Coin;
+import com.mygdx.pirategame.entities.Powerup;
 import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
+import com.mygdx.pirategame.entities.Fire;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
 
@@ -67,6 +70,13 @@ public class GameScreen implements Screen {
     private static ArrayList<Coin> Coins = new ArrayList<>();
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
+    
+    private static ArrayList<Powerup> Powerups = new ArrayList<>();
+    private static long powerupActivatedTime;  //Used as common timer for all powerup instances so just has get and set methods
+    private static String powerupType;
+    
+    private static ArrayList<Fire> fires = new ArrayList<>();
+    private long lastFire;
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -157,6 +167,22 @@ public class GameScreen implements Screen {
         for (int i = 0; i < Coins.size()/2; i++){
             Coins.get(i).setVisible(false);
         }
+        
+        //-------Team-17--------
+        //Random powerups
+        Powerups = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            validLoc = false;
+            while (!validLoc) {
+                //Get random x and y coords
+                a = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+                b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+                validLoc = checkGenPos(a, b);
+            }
+            //Add a powerup at the random coords
+            Powerups.add(new Powerup(this, a, b));
+        }
+        //----------------------
 
         //Setting stage
         stage = new Stage(new ScreenViewport());
@@ -267,6 +293,7 @@ public class GameScreen implements Screen {
      */
     public void handleInput(float dt) {
         if (gameStatus == GAME_RUNNING) {
+        	//-------Team-17--------
             // Left physics impulse on 'A'
         	int impulseX = 0;
         	int impulseY = 0;
@@ -294,20 +321,7 @@ public class GameScreen implements Screen {
             if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
                 player.fire();
             }
-            /*
-            // Checking if player at max velocity, and keeping them below max
-            if (player.b2body.getLinearVelocity().x >= maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(-accel, 0), player.b2body.getWorldCenter(), true);
-            }
-            if (player.b2body.getLinearVelocity().x <= -maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(accel, 0), player.b2body.getWorldCenter(), true);
-            }
-            if (player.b2body.getLinearVelocity().y >= maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(0, -accel), player.b2body.getWorldCenter(), true);
-            }
-            if (player.b2body.getLinearVelocity().y <= -maxSpeed) {
-                player.b2body.applyLinearImpulse(new Vector2(0, accel), player.b2body.getWorldCenter(), true);
-            }*/
+            //----------------------
 
             //TEST INPUTS KEY TEAM 17-------
             //Sinks any sinkable objects
@@ -362,11 +376,26 @@ public class GameScreen implements Screen {
             ships.get(i).update(dt);
         }
 
-        //Updates coin
+        //Updates coins
         for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
+        }    
+        //-------Team-17--------
+        //Updates powerups
+        for (int i = 0; i < Powerups.size(); i++) {
+            Powerups.get(i).update();
         }
-        //After a delay check if a college is destroyed. If not, it can fire
+        
+        //Updates fires
+        for (int i = 0; i < fires.size(); i++) {
+        	fires.get(i).update();
+        }
+        
+        keepPowerupEffects();
+        //----------------------
+        
+        //After a delay check if a college is destroyed. If not, if can fire
+
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
                 colleges.get("Anne Lister").fire();
@@ -416,7 +445,18 @@ public class GameScreen implements Screen {
         for(int i=0;i<Coins.size();i++) {
             Coins.get(i).draw(game.batch);
         }
-
+        
+      //-------Team-17--------
+        //Renders powerups
+        for(int i=0;i<Powerups.size();i++) {
+        	Powerups.get(i).draw(game.batch);
+        }
+        
+      //Renders fires
+        for(int i=0;i<fires.size();i++) {
+        	fires.get(i).draw(game.batch);
+        }
+      //----------------------
         //Renders colleges
         player.draw(game.batch);
         colleges.get("Alcuin").draw(game.batch);
@@ -517,7 +557,7 @@ public class GameScreen implements Screen {
      *
      * @param percentage percentage increase
      */
-    public static void changeAcceleration(Float percentage){
+    public static void changeAcceleration(float percentage){
         accel = accel * (1 + (percentage / 100));
     }
 
@@ -526,9 +566,80 @@ public class GameScreen implements Screen {
      *
      * @param percentage percentage increase
      */
-    public static void changeMaxSpeed(Float percentage){
+    public static void changeMaxSpeed(float percentage){
         maxSpeed = maxSpeed * (1 +(percentage/100));
     }
+    
+    //-------Team-17--------
+    /**
+     * Sets when the last powerup was activated
+     * @param time the time the last powerup was activated
+     */
+    public static void setPowerupActivatedTime(long time) {
+    	powerupActivatedTime = time;
+    }
+    
+    /**
+     * returns when the last powerup was activated
+     * @return the time the last powerup was activated
+     */
+    public static long getPowerupActivatedTime() {
+    	return powerupActivatedTime;
+    }
+    
+    /**
+     * Sets the type of powerup, only certain inputs will have an effect
+     * @param type the type of powerup
+     */
+    public static void setPowerupType(String type) {
+    	powerupType = type;
+    }
+    
+    /**
+     * Controls what powerups are active/unactive
+     * should be called every update
+     */
+    private void keepPowerupEffects() {
+    	switch(powerupType) {
+    	case "Auto Reload":
+    		player.turnOffAstral();
+    		player.turnOffRubber();
+    		player.turnOffSoup();
+    		player.fire();
+    		break;
+    	case "Astral Body":
+    		player.turnOffRubber();
+    		player.turnOffSoup();
+    		player.turnOnAstral();
+    		break;
+    	case "Oil Spill":
+    		player.turnOffAstral();
+    		player.turnOffRubber();
+    		player.turnOffSoup();
+    		if (TimeUtils.timeSinceMillis(lastFire) > 100) {
+    			float x = player.getX() + player.getWidth()/2;
+        		float y = player.getY() + player.getWidth();
+        		fires.add(new Fire(this, x, y));
+        		lastFire = TimeUtils.millis();
+    		}
+    		break;
+    	case "Rubber Coating":
+    		player.turnOffAstral();
+    		player.turnOffSoup();
+    		player.turnOnRubber();
+    		break;
+    	case "Soup":
+    		player.turnOffAstral();
+    		player.turnOffRubber();
+    		player.turnOnSoup();
+    		break;
+    	case "":
+    		player.turnOffAstral();
+    		player.turnOffRubber();
+    		player.turnOffSoup();
+    	}
+    }
+    //----------------------
 
     /**
      * Changes the amount of damage done by each hit. Accessed by skill tree
