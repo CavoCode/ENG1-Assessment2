@@ -58,9 +58,10 @@ public class Powerup extends Entity {
      */
     public void update() {
     	
+    	// turns off active powerup the time has run out
         if(TimeUtils.timeSinceMillis(GameScreen.getPowerupActivatedTime()) > powerupTimeLength) {
         	turnOffPowerups();
-        	GameScreen.setPowerupActivatedTime(TimeUtils.millis() + 25000);
+        	GameScreen.setPowerupActivatedTime(TimeUtils.millis());
         }
     	
         //If powerup is set to destroy and isnt, destroy it
@@ -105,8 +106,9 @@ public class Powerup extends Entity {
     public void entityContact() {
         //ENTER COLLISION CODE HERE
     	turnOffPowerups();
+    	//renew powerup active countdown which can extend life of some powerups e.g. astral body
     	GameScreen.setPowerupActivatedTime(TimeUtils.millis());
-    	switch(random.nextInt(4)) {
+    	switch(random.nextInt(5)) {
     	case 0:
     		Hud.setPowerupType("Auto Reload");
     		GameScreen.setPowerupType("Auto Reload");
@@ -137,7 +139,9 @@ public class Powerup extends Entity {
         }
 
     }
-    
+    /**
+     * Makes no powerup active
+     */
     private void turnOffPowerups() {
     	Hud.setPowerupType("");
     	GameScreen.setPowerupType("");

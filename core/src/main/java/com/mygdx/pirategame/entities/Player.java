@@ -31,6 +31,7 @@ public class Player extends Sprite {
     private boolean astral;
     private Vector2 astralPos;
     public static boolean rubber;
+    public static boolean soup;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -128,6 +129,7 @@ public class Player extends Sprite {
          */
     }
     
+    //-------Team-17--------
     /**
      * Applies a force to player b2body according to x and y components.
      * May result in faster speeds diagonally than orthogonally as drag works on scalars but we have to use velocity components
@@ -184,12 +186,18 @@ public class Player extends Sprite {
     	}
     }
     
+    /**
+     * toggles on the astral body power by making a new fixture without collisions
+     */
     public void turnOnAstral() {
     	if (!astral) {
     		astral = true;
 	    	astralPos = b2body.getPosition();
 	    	Vector2 vel = b2body.getLinearVelocity();
 	    	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
+
 	    	// Defines a players position
 	        BodyDef bdef = new BodyDef();
 	        bdef.position.set(astralPos.x, astralPos.y);
@@ -212,10 +220,16 @@ public class Player extends Sprite {
     	}
     }
     
+    /**
+     * toggles off the astral body powerup returning the player to original position
+     */
     public void turnOffAstral() {
     	if (astral) {
     		astral = false;
         	Vector2 vel = b2body.getLinearVelocity();
+        	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
         	
         	// Defines a players position
             BodyDef bdef = new BodyDef();
@@ -239,12 +253,18 @@ public class Player extends Sprite {
     	}
     }
     
+    /**
+     * toggles on rubber coating powerup by making a new fixture with high restitution
+     */
     public void turnOnRubber() {
     	if (!rubber) {
     		rubber = true;
     		
     		Vector2 vel = b2body.getLinearVelocity();
         	Vector2 pos = b2body.getPosition();
+        	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
     		
         	// Defines a players position
             BodyDef bdef = new BodyDef();
@@ -269,12 +289,18 @@ public class Player extends Sprite {
     	}
     }
     
+    /**
+     * toggles off the rubber coating powerup
+     */
     public void turnOffRubber() {
     	if (rubber) {
     		rubber = false;
 
     		Vector2 vel = b2body.getLinearVelocity();
         	Vector2 pos = b2body.getPosition();
+        	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
     		
         	// Defines a players position
             BodyDef bdef = new BodyDef();
@@ -298,6 +324,33 @@ public class Player extends Sprite {
     	}
     }
 
+    /** 
+     * toggles on the soup powerup
+     * (the regen is done in the hud)
+     */
+    public void turnOnSoup() {
+    	if (!soup) {
+    		soup = true;
+    		dragFactor = 2.0f;
+    	    maxSpeed = 10.0f + dragFactor;
+    	    accel = 0.15f;
+    	}
+    }
+    
+    /**
+     * toggles of the soup powerup
+     */
+    public void turnOffSoup() {
+    	if (soup) {
+    		soup = false;
+    	    dragFactor = 1.0f;
+    	    maxSpeed = 5.0f + dragFactor;
+    	    accel = 0.05f;
+    	}
+    }
+    //----------------------
+    
+   
     /**
      * Draws the player using batch
      * Draws cannonballs using batch

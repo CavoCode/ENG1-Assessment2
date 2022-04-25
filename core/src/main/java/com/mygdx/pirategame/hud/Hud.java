@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.screens.SkillTree;
 
 /**
@@ -110,11 +111,15 @@ public class Hud implements Disposable {
     public void update(float dt) {
         timeCount += dt;
         if(timeCount >= 1) {
-            //Regen health every second
-            if(health != 100) {
-                health += 1;
-                healthLabel.setText(String.format("%02d", health));
-            }
+			// Regen health every second
+			if (Player.soup) {
+				health += 2;
+			}
+			health += 1;
+			if (health > 100) {
+				health = 100;
+			}
+			healthLabel.setText(String.format("%02d", health));
             //Gain point every second
             score += 1;
             scoreLabel.setText(String.format("%03d", score));
