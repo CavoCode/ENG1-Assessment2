@@ -56,6 +56,14 @@ public class AssetTesting {
         assertTrue("does hudBG.png asset exist", Gdx.files
                 .internal("hud/hudBG.png").exists());
     }    
+
+    @Test
+    public void weatheringExists() {
+        assertTrue("does weathering.png asset exist", Gdx.files
+                .internal("hud/weathering.png").exists());
+    }    
+
+    
     
     //MAP ASSETS TESTS IN MapAssets.java
     

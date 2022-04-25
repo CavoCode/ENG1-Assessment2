@@ -161,8 +161,11 @@ public class GameScreen implements Screen {
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
                 validLoc = checkGenPos(a, b);
             }
-            //Add a coin at the random coords
-            Coins.add(new Coin(this, a, b));
+            //Add a coins at the random coords
+            Coins.add(new Coin(this, a, b, true));
+        }
+        for (int i = 0; i < Coins.size()/2; i++){
+            Coins.get(i).setVisible(false);
         }
         
         //-------Team-17--------
@@ -319,6 +322,22 @@ public class GameScreen implements Screen {
                 player.fire();
             }
             //----------------------
+
+            //TEST INPUTS KEY TEAM 17-------
+            //Sinks any sinkable objects
+            if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
+                for (int i = 0; i < Coins.size(); i++){
+                    Coins.get(i).setVisible(false);
+                }
+            }
+            //Rises any risable objects
+            if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
+                for (int i = 0; i < Coins.size(); i++){
+                    Coins.get(i).setVisible(true);
+                }
+            }
+            //------------------------------
+
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             if(gameStatus == GAME_PAUSED) {
@@ -360,8 +379,7 @@ public class GameScreen implements Screen {
         //Updates coins
         for (int i = 0; i < Coins.size(); i++) {
             Coins.get(i).update();
-        }
-        
+        }    
         //-------Team-17--------
         //Updates powerups
         for (int i = 0; i < Powerups.size(); i++) {
@@ -377,6 +395,7 @@ public class GameScreen implements Screen {
         //----------------------
         
         //After a delay check if a college is destroyed. If not, if can fire
+
         if (stateTime > 1) {
             if (!colleges.get("Anne Lister").destroyed) {
                 colleges.get("Anne Lister").fire();
@@ -690,5 +709,28 @@ public class GameScreen implements Screen {
         b2dr.dispose();
         hud.dispose();
         stage.dispose();
+    }
+
+    /**
+     * Enacts the entire weather event (currently just holding snippets of code)
+     */
+    public void weather() {
+        
+        //Turns off all coins
+        for (int i = 0; i < Coins.size(); i++){
+            Coins.get(i).setVisible(false);
+        }
+        //Turns on all coins
+        for (int i = 0; i < Coins.size(); i++){
+            Coins.get(i).setVisible(true);
+        }
+
+        //Player De-buffs (speed and accel)
+        changeAcceleration(-15F);
+        changeMaxSpeed(-15F);
+
+        //Player Re-buffs (speed and accel)
+        changeAcceleration(15F);
+        changeMaxSpeed(15F);
     }
 }

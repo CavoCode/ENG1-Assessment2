@@ -75,6 +75,8 @@ public class Player extends Sprite {
             if(ball.isDestroyed())
                 cannonBalls.removeValue(ball, true);
         }
+        
+        System.out.println(b2body.getPosition());
     }
 
     /**
