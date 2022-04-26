@@ -157,7 +157,7 @@ public class EnemyShip extends Enemy {
     	movingTime += dt;
     	if(college != "Alcuin") {
 	    	Vector2 target = screen.getPlayerPos();
-	        if ((target.x >= b2body.getPosition().x - 3 && target.x <= b2body.getPosition().x + 3) && (target.y >= b2body.getPosition().y - 3 && target.y <= b2body.getPosition().y + 3)) {
+	        if ((target.x >= b2body.getPosition().x - 4 && target.x <= b2body.getPosition().x + 4) && (target.y >= b2body.getPosition().y - 4 && target.y <= b2body.getPosition().y + 4)) {
 	        	moveToCord(target, 1.5f);
 	            moved = true;
 	        }
@@ -174,13 +174,13 @@ public class EnemyShip extends Enemy {
 		                    validLoc = screen.checkGenPos(ranX, ranY);
 		        		} 
 		                Vector2 randomCord = new Vector2(ranX,ranY);
-		        		moveToCord(randomCord, 0.5f);
+		        		moveToCord(randomCord, 1f);
 		        		movingTime = 0.0f;
 	        		}
 	        		
 	        	}
 	        	else if (college == "Goodricke") {
-	        		if(movingTime >= 3.5f + Math.random()) {
+	        		if(movingTime >= 2f + Math.random()) {
 		        		int ranX = 0;
 		        		int ranY = 0;
 		        		boolean validLoc = false;
@@ -190,6 +190,42 @@ public class EnemyShip extends Enemy {
 		                    ranY = rand.nextInt(2000) - 1000;
 		                    ranX = (int)Math.floor((1760 / PirateGame.PPM) + (ranX / PirateGame.PPM));
 		                    ranY = (int)Math.floor((6767 / PirateGame.PPM) + (ranY / PirateGame.PPM));
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        	}
+	        	else if (college == "Constantine") {
+	        		if(movingTime >= 2f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y coords
+		        			ranX = rand.nextInt(2000) - 1000;
+		                    ranY = rand.nextInt(2000) - 1000;
+		                    ranX = (int)Math.floor((6240 / PirateGame.PPM) + (ranX / PirateGame.PPM));
+		                    ranY = (int)Math.floor((6703 / PirateGame.PPM) + (ranY / PirateGame.PPM));
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        	}
+	        	else if (college == "Anne Lister") {
+	        		if(movingTime >= 2f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y coords
+		        			ranX = rand.nextInt(2000) - 1000;
+		                    ranY = rand.nextInt(2000) - 1000;
+		                    ranX = (int)Math.floor((6304 / PirateGame.PPM) + (ranX / PirateGame.PPM));
+		                    ranY = (int)Math.floor((1199 / PirateGame.PPM) + (ranY / PirateGame.PPM));
 		                    validLoc = screen.checkGenPos(ranX, ranY);
 		        		} 
 		                Vector2 randomCord = new Vector2(ranX,ranY);
