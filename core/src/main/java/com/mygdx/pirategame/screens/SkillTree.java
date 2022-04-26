@@ -228,7 +228,3 @@ public class SkillTree implements Screen {
         stage.dispose();
     }
 }
-
-
-
-
