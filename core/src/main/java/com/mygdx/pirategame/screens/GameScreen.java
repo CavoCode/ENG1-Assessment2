@@ -663,7 +663,7 @@ public class GameScreen implements Screen {
      * @param x random x value
      * @param y random y value
      */
-    private Boolean checkGenPos(int x, int y){
+    public Boolean checkGenPos(int x, int y){
         if (invalidSpawn.tileBlocked.containsKey(x)){
             ArrayList<Integer> yTest = invalidSpawn.tileBlocked.get(x);
             if (yTest.contains(y)) {
