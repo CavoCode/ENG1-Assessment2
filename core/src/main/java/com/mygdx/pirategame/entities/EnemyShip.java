@@ -19,14 +19,13 @@ import java.util.Random;
  * Generates enemy ship data
  * Instantiates an enemy ship
  *
- *@author Ethan Alabaster, Sam Pearson, Edward Poulter
- *@version 1.0
+ *@author Ethan Alabaster, Sam Pearson, Edward Poulter, Team17 - Michael Cavaciuti
+ *@version 2.0
  */
 public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
     public Random rand = new Random();
-    private boolean moved = false;
     private float movingTime = 0;
     private Sound destroy;
     private Sound hit;
@@ -88,11 +87,11 @@ public class EnemyShip extends Enemy {
         }
         //Team17 Start of Change
         else {
-        	//System.out.println(orgCord);
+        	//As ship is not destroyed continue tracking player or move accordingly
         	aiTracking(dt);
         }
+        //Team17 End of Change
    }
-       //Team17 End of Change
     
 
     /**
@@ -151,16 +150,26 @@ public class EnemyShip extends Enemy {
         Hud.changePoints(5);
     }
 
-    //Team17 Start of Change - Ai idle movement
-    
+    //Team17 Start of Change - Ai movement
+    /**
+     * Updates enemy movement according to delta time or player position 
+     * Checks valid movement
+     * @param dt - delta time
+     */
     private void aiTracking(float dt) {
+    	//set movingTime as a timer for enemy movement to change when in idle state
     	movingTime += dt;
+    	
+    	//Movement is carried out as long as enemy ship is not affiliated with player team
     	if(college != "Alcuin") {
+    		//Retrieve players positional vector
 	    	Vector2 target = screen.getPlayerPos();
+	    	//Check if enemy is within a certain area of player
 	        if ((target.x >= b2body.getPosition().x - 4 && target.x <= b2body.getPosition().x + 4) && (target.y >= b2body.getPosition().y - 4 && target.y <= b2body.getPosition().y + 4)) {
+	        	//Move towards player (target) when in range
 	        	moveToCord(target, 1.5f);
-	            moved = true;
 	        }
+	        //If not in range, move according to college affiliation
 	        else {
 	        	if(college == "Unaligned") {
 	        		if(movingTime >= 3.5f + Math.random()) {
@@ -168,7 +177,7 @@ public class EnemyShip extends Enemy {
 		        		int ranY = 0;
 		        		boolean validLoc = false;
 		        		while (!validLoc) {
-		                    //Get random x and y coords
+		                    //Get random x and y cords
 		        			ranX = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
 		        			ranY = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
 		                    validLoc = screen.checkGenPos(ranX, ranY);
@@ -185,7 +194,7 @@ public class EnemyShip extends Enemy {
 		        		int ranY = 0;
 		        		boolean validLoc = false;
 		        		while (!validLoc) {
-		                    //Get random x and y coords
+		                    //Get random x and y cords
 		        			ranX = rand.nextInt(2000) - 1000;
 		                    ranY = rand.nextInt(2000) - 1000;
 		                    ranX = (int)Math.floor((1760 / PirateGame.PPM) + (ranX / PirateGame.PPM));
@@ -203,7 +212,7 @@ public class EnemyShip extends Enemy {
 		        		int ranY = 0;
 		        		boolean validLoc = false;
 		        		while (!validLoc) {
-		                    //Get random x and y coords
+		                    //Get random x and y cords
 		        			ranX = rand.nextInt(2000) - 1000;
 		                    ranY = rand.nextInt(2000) - 1000;
 		                    ranX = (int)Math.floor((6240 / PirateGame.PPM) + (ranX / PirateGame.PPM));
@@ -221,7 +230,7 @@ public class EnemyShip extends Enemy {
 		        		int ranY = 0;
 		        		boolean validLoc = false;
 		        		while (!validLoc) {
-		                    //Get random x and y coords
+		                    //Get random x and y cords
 		        			ranX = rand.nextInt(2000) - 1000;
 		                    ranY = rand.nextInt(2000) - 1000;
 		                    ranX = (int)Math.floor((6304 / PirateGame.PPM) + (ranX / PirateGame.PPM));
@@ -237,15 +246,25 @@ public class EnemyShip extends Enemy {
         }
 	}
     
+    /**
+     * 
+     * Move enemy ship towards a given target coordinate at a certain speed
+     * 
+     * @param cordTemp - Target coordinate to move enemy towards
+     * @param speed - Speed at which enemy should move
+     */
     private void moveToCord(Vector2 cordTemp, float speed) { 
+    	//Subtract enemy positional vector from given target vector
     	cordTemp.sub(b2body.getPosition());
+    	//Normalise vector
     	cordTemp.nor();
+    	//Set linear velocity towards target vector as scalar with given speed
         b2body.setLinearVelocity(cordTemp.scl(speed));
     }
-    
     //Team17 End of Change
+    
     /**
-     * Updates the ship image. Particuarly change texture on college destruction
+     * Updates the ship image. Particularly change texture on college destruction
      *
      * @param alignment Associated college
      * @param path Path of new texture
