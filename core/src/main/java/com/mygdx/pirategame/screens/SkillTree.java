@@ -3,8 +3,10 @@ package com.mygdx.pirategame.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -41,6 +43,8 @@ public class SkillTree implements Screen {
     private TextButton Acceleration;
     private TextButton ExtraLives;
     private TextButton GoldMultiplier;
+    private Image backgroundImg;
+    private Texture background;
     
 
     /**
@@ -68,6 +72,18 @@ public class SkillTree implements Screen {
     public void show() {
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
+        //Create texture for background image
+        background = new Texture("hud/shopScreen.jpg"); 
+        backgroundImg = new Image(background);
+        backgroundImg.setFillParent(true);
+        //Create a table for the background image
+        Table backgroundTable = new Table();
+        backgroundTable.top().right();
+        backgroundTable.setFillParent(true);
+        //Add image to table
+        backgroundTable.add(backgroundImg);
+        //setVisible here
+        stage.addActor(backgroundImg);
         // Create a table that fills the screen
         Table table = new Table();
         table.center();
