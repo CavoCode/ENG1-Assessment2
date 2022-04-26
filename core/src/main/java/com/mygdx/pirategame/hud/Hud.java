@@ -25,7 +25,6 @@ public class Hud implements Disposable {
 
     private float timeCount;
     private static Integer score;
-    private static Integer MaxHealth;
     private static Integer health;
     private Texture hp;
     private Texture boxBackground;
@@ -51,7 +50,6 @@ public class Hud implements Disposable {
      * @param sb Batch of images used in the hud
      */
     public Hud(SpriteBatch sb) {
-        MaxHealth = 100;
         health = 100;
         score = 0;
         coins = 0;
@@ -84,7 +82,7 @@ public class Hud implements Disposable {
         table4.setFillParent(true);
 
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        healthLabel = new Label(String.format("%03d", MaxHealth), new Label.LabelStyle(new BitmapFont(), Color.RED));
+        healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
         pointsText = new Label("Points:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         powerupTypeText = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -149,14 +147,7 @@ public class Hud implements Disposable {
             //TEAM 17--Remove a second each second (weather timer)
         }
     }
-    /**Team 17 - Scone Zone
-     * Sabrina Djebbar
-     * changes the max health to mimic extra lives
-     * @param value increase the maximum health
-      */
-    public static void changeMaxHealth(int value) {
-        MaxHealth += value;
-    }
+
     /**
      * Changes health by value increase
      *
@@ -169,18 +160,12 @@ public class Hud implements Disposable {
 
     /**
      * Changes coins by value increase
-     * 
-     * Updates by Team 17 for Skill Tree
-     *if value is negative then it deducts the value without multiplying the coinmultiplier from the current value
-     * 
+     *
      * @param value Increase to coins
      */
     public static void changeCoins(int value) {
         if (value > 0) {
             coins += value * coinMulti;
-            coinLabel.setText(String.format("%03d", coins));
-        }else if (value < 0){
-            coins += value;
             coinLabel.setText(String.format("%03d", coins));
         }
     }
@@ -235,7 +220,7 @@ public class Hud implements Disposable {
     }
 
     /**
-     * 
+     * (Not Used)
      * Returns coins value
      *
      * @return health : returns coins value

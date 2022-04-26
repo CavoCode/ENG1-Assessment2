@@ -171,6 +171,7 @@ public class EnemyShip extends Enemy {
 	        }
 	        //If not in range, move according to college affiliation
 	        else {
+	        	//If an unaligned ship (no affiliation) move randomly anywhere on the map
 	        	if(college == "Unaligned") {
 	        		if(movingTime >= 3.5f + Math.random()) {
 		        		int ranX = 0;
