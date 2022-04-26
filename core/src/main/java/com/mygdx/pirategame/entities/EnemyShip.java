@@ -12,6 +12,8 @@ import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
 
+import java.util.Random;
+
 /**
  * Enemy Ship
  * Generates enemy ship data
@@ -23,8 +25,9 @@ import com.mygdx.pirategame.main.PirateGame;
 public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
-    private Vector2 orgCord;
+    public Random rand = new Random();
     private boolean moved = false;
+    private float movingTime = 0;
     private Sound destroy;
     private Sound hit;
 
@@ -40,7 +43,6 @@ public class EnemyShip extends Enemy {
     public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
         super(screen, x, y);
         enemyShip = new Texture(path);
-        orgCord = new Vector2(x, y);
         //Assign college
         college = assignment;
         //Set audios
@@ -87,7 +89,7 @@ public class EnemyShip extends Enemy {
         //Team17 Start of Change
         else {
         	//System.out.println(orgCord);
-        	aiTracking();
+        	aiTracking(dt);
         }
    }
        //Team17 End of Change
@@ -151,32 +153,58 @@ public class EnemyShip extends Enemy {
 
     //Team17 Start of Change - Ai idle movement
     
-    private void aiTracking() {
+    private void aiTracking(float dt) {
+    	movingTime += dt;
     	if(college != "Alcuin") {
 	    	Vector2 target = screen.getPlayerPos();
 	        if ((target.x >= b2body.getPosition().x - 3 && target.x <= b2body.getPosition().x + 3) && (target.y >= b2body.getPosition().y - 3 && target.y <= b2body.getPosition().y + 3)) {
-	        	target.sub(b2body.getPosition());
-	            target.nor();
-	            float speed = 1f;
-	            b2body.setLinearVelocity(target.scl(speed));
+	        	moveToCord(target, 1.5f);
 	            moved = true;
 	        }
-	        
-        	if(moved) {
-        		returnToCord();
-        		if (b2body.getPosition().x == orgCord.x && b2body.getPosition().y == orgCord.y) {
-        			moved = false;
-        		}
-        	}
-	        
+	        else {
+	        	if(college == "Unaligned") {
+	        		if(movingTime >= 3.5f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y coords
+		        			ranX = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+		        			ranY = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        		
+	        	}
+	        	else if (college == "Goodricke") {
+	        		if(movingTime >= 3.5f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y coords
+		        			ranX = rand.nextInt(2000) - 1000;
+		                    ranY = rand.nextInt(2000) - 1000;
+		                    ranX = (int)Math.floor((1760 / PirateGame.PPM) + (ranX / PirateGame.PPM));
+		                    ranY = (int)Math.floor((6767 / PirateGame.PPM) + (ranY / PirateGame.PPM));
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        	}
+	        }
         }
 	}
     
-    private void returnToCord() {
-    	orgCord.sub(b2body.getPosition());
-		orgCord.nor();
-        float speed = 0.5f;
-        b2body.setLinearVelocity(orgCord.scl(speed));
+    private void moveToCord(Vector2 cordTemp, float speed) { 
+    	cordTemp.sub(b2body.getPosition());
+    	cordTemp.nor();
+        b2body.setLinearVelocity(cordTemp.scl(speed));
     }
     
     //Team17 End of Change

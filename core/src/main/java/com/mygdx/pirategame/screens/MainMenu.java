@@ -100,7 +100,6 @@ public class MainMenu implements Screen {
             }
         });
 
-        shapeRenderer = new ShapeRenderer();
     }
 
     /**
@@ -117,12 +116,6 @@ public class MainMenu implements Screen {
          */
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(0,1,0,1));
-        shapeRenderer.rect(50,50, 50, 50);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.3f));
-        shapeRenderer.rect(0, 0, stage.getWidth(), stage.getHeight());
-        shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
