@@ -28,6 +28,10 @@ public class Player extends Sprite {
     private static float maxSpeed = 5.0f + dragFactor;
     private static float accel = 0.05f;
     private float angle;
+    private boolean astral;
+    private Vector2 astralPos;
+    public static boolean rubber;
+    public static boolean soup;
 
     /**
      * Instantiates a new Player. Constructor only called once per game
@@ -71,6 +75,8 @@ public class Player extends Sprite {
             if(ball.isDestroyed())
                 cannonBalls.removeValue(ball, true);
         }
+        
+        System.out.println(b2body.getPosition());
     }
 
     /**
@@ -102,13 +108,14 @@ public class Player extends Sprite {
         fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
 
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.POWERUP_BIT;
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
     }
+    
 
     /**
-     * Called when E is pushed. Causes 1 cannon ball to spawn on both sides of the ships wih their relative velocity
+     * Called when E is pushed. Causes 1 cannon ball to spawn on both sides of the ships with their relative velocity
      */
     public void fire() {
         // Fires cannons
@@ -124,6 +131,7 @@ public class Player extends Sprite {
          */
     }
     
+    //-------Team-17--------
     /**
      * Applies a force to player b2body according to x and y components.
      * May result in faster speeds diagonally than orthogonally as drag works on scalars but we have to use velocity components
@@ -148,11 +156,10 @@ public class Player extends Sprite {
     	
     	if (x == 0 && y == 0) {
     		//doesn't calculate a new angle so the ship stays pointing in the same direction when slowing down
-    		//technically not pointing in the same direction as movement but speeds or difference are so small no-one can tell
-    		//System.out.println(linx);
+    		//technically not pointing in the same direction as movement but speeds and difference in angle are so small no-one can tell
     	}
     	else {
-    		//calculates angle that the ship is pointing in
+    		//calculates the angle that the ship is pointing in
     		angle = (float) Math.atan2(b2body.getLinearVelocity().y, b2body.getLinearVelocity().x);
     	}
     }
@@ -181,12 +188,171 @@ public class Player extends Sprite {
     	}
     }
     
-    /*
-    private float findSpeed(float x, float y) {
-    	return (float) (Math.pow(x, 2) + Math.pow(y, 2));
-    }
-    */
+    /**
+     * toggles on the astral body power by making a new fixture without collisions
+     */
+    public void turnOnAstral() {
+    	if (!astral) {
+    		astral = true;
+	    	astralPos = b2body.getPosition();
+	    	Vector2 vel = b2body.getLinearVelocity();
+	    	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
 
+	    	// Defines a players position
+	        BodyDef bdef = new BodyDef();
+	        bdef.position.set(astralPos.x, astralPos.y);
+	        bdef.type = BodyDef.BodyType.DynamicBody;
+	        b2body = world.createBody(bdef);
+	
+	        // Defines a player's shape and contact borders
+	        FixtureDef fdef = new FixtureDef();
+	        CircleShape shape = new CircleShape();
+	        shape.setRadius(55 / PirateGame.PPM);
+	
+	        // setting BIT identifier
+	        fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+	
+	        // determining what this BIT can collide with
+	        fdef.filter.maskBits = PirateGame.COIN_BIT	| PirateGame.POWERUP_BIT;
+	        fdef.shape = shape;
+	        b2body.createFixture(fdef).setUserData(this);
+	        b2body.setLinearVelocity(vel);
+    	}
+    }
+    
+    /**
+     * toggles off the astral body powerup returning the player to original position
+     */
+    public void turnOffAstral() {
+    	if (astral) {
+    		astral = false;
+        	Vector2 vel = b2body.getLinearVelocity();
+        	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
+        	
+        	// Defines a players position
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(astralPos.x , astralPos.y);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
+
+            // Defines a player's shape and contact borders
+            FixtureDef fdef = new FixtureDef();
+            CircleShape shape = new CircleShape();
+            shape.setRadius(55 / PirateGame.PPM);
+
+            // setting BIT identifier
+            fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+
+            // determining what this BIT can collide with
+            fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.POWERUP_BIT;
+            fdef.shape = shape;
+            b2body.createFixture(fdef).setUserData(this);
+            b2body.setLinearVelocity(vel);
+    	}
+    }
+    
+    /**
+     * toggles on rubber coating powerup by making a new fixture with high restitution
+     */
+    public void turnOnRubber() {
+    	if (!rubber) {
+    		rubber = true;
+    		
+    		Vector2 vel = b2body.getLinearVelocity();
+        	Vector2 pos = b2body.getPosition();
+        	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
+    		
+        	// Defines a players position
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(pos.x , pos.y);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
+
+            // Defines a player's shape and contact borders
+            FixtureDef fdef = new FixtureDef();
+            fdef.restitution = 3f;
+            CircleShape shape = new CircleShape();
+            shape.setRadius(55 / PirateGame.PPM);
+
+            // setting BIT identifier
+            fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+
+            // determining what this BIT can collide with
+            fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.POWERUP_BIT;
+            fdef.shape = shape;
+            b2body.createFixture(fdef).setUserData(this);
+            b2body.setLinearVelocity(vel);
+    	}
+    }
+    
+    /**
+     * toggles off the rubber coating powerup
+     */
+    public void turnOffRubber() {
+    	if (rubber) {
+    		rubber = false;
+
+    		Vector2 vel = b2body.getLinearVelocity();
+        	Vector2 pos = b2body.getPosition();
+        	
+	    	Array<Fixture> fix = b2body.getFixtureList();
+	    	b2body.destroyFixture(fix.first());
+    		
+        	// Defines a players position
+            BodyDef bdef = new BodyDef();
+            bdef.position.set(pos.x , pos.y);
+            bdef.type = BodyDef.BodyType.DynamicBody;
+            b2body = world.createBody(bdef);
+
+            // Defines a player's shape and contact borders
+            FixtureDef fdef = new FixtureDef();
+            CircleShape shape = new CircleShape();
+            shape.setRadius(55 / PirateGame.PPM);
+
+            // setting BIT identifier
+            fdef.filter.categoryBits = PirateGame.PLAYER_BIT;
+
+            // determining what this BIT can collide with
+            fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.COIN_BIT | PirateGame.ENEMY_BIT | PirateGame.COLLEGE_BIT | PirateGame.COLLEGESENSOR_BIT | PirateGame.COLLEGEFIRE_BIT | PirateGame.POWERUP_BIT;
+            fdef.shape = shape;
+            b2body.createFixture(fdef).setUserData(this);
+            b2body.setLinearVelocity(vel);
+    	}
+    }
+
+    /** 
+     * toggles on the soup powerup
+     * (the regen is done in the hud)
+     */
+    public void turnOnSoup() {
+    	if (!soup) {
+    		soup = true;
+    		dragFactor = 2.0f;
+    	    maxSpeed = 10.0f + dragFactor;
+    	    accel = 0.15f;
+    	}
+    }
+    
+    /**
+     * toggles of the soup powerup
+     */
+    public void turnOffSoup() {
+    	if (soup) {
+    		soup = false;
+    	    dragFactor = 1.0f;
+    	    maxSpeed = 5.0f + dragFactor;
+    	    accel = 0.05f;
+    	}
+    }
+    //----------------------
+    
+   
     /**
      * Draws the player using batch
      * Draws cannonballs using batch

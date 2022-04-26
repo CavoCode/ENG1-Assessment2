@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.screens.SkillTree;
 
 /**
@@ -28,16 +29,19 @@ public class Hud implements Disposable {
     private Texture hp;
     private Texture boxBackground;
     private Texture coinPic;
+    private Texture weatherHud; //Team 17
 
     private static Label scoreLabel;
     private static Label healthLabel;
     private static Label coinLabel;
     private static Label pointsText;
+    private static Label powerupTypeText;
     private static Integer coins;
     private static Integer coinMulti;
     private Image hpImg;
     private Image box;
     private Image coin;
+    private Image weather; //Team 17
 
     /**
      * Retrieves information and displays it in the hud
@@ -66,6 +70,7 @@ public class Hud implements Disposable {
         Table table1 = new Table(); //Counters
         Table table2 = new Table(); //Pictures or points label
         Table table3 = new Table(); //Background
+        Table table4 = new Table(); //Powerups
 
         table1.top().right();
         table1.setFillParent(true);
@@ -73,12 +78,16 @@ public class Hud implements Disposable {
         table2.setFillParent(true);
         table3.top().right();
         table3.setFillParent(true);
+        table4.top().center();
+        table4.setFillParent(true);
 
         scoreLabel = new Label(String.format("%03d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         healthLabel = new Label(String.format("%03d", health), new Label.LabelStyle(new BitmapFont(), Color.RED));
         coinLabel = new Label(String.format("%03d", coins), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
         pointsText = new Label("Points:", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        powerupTypeText = new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
+        table4.add(powerupTypeText).height(32).padBottom(90);
         table3.add(box).width(140).height(140).padBottom(15).padLeft(30);
         table2.add(hpImg).width(32).height(32).padTop(16).padRight(90);
         table2.row();
@@ -90,9 +99,24 @@ public class Hud implements Disposable {
         table1.add(coinLabel).padTop(20).top().right().padRight(40);
         table1.row();
         table1.add(scoreLabel).padTop(22).top().right().padRight(40);
+        stage.addActor(table4);
         stage.addActor(table3);
         stage.addActor(table2);
         stage.addActor(table1);
+
+        //Team 17-----
+        weatherHud = new Texture("hud/weathering.png"); 
+        weather = new Image(weatherHud);
+        weather.setFillParent(true);
+
+        Table weatherTable = new Table();
+        weatherTable.top().right();
+        weatherTable.setFillParent(true);
+
+        weatherTable.add(weather);
+        //setVisible here
+        stage.addActor(weather);
+        //------------
     }
 
     /**
@@ -103,11 +127,15 @@ public class Hud implements Disposable {
     public void update(float dt) {
         timeCount += dt;
         if(timeCount >= 1) {
-            //Regen health every second
-            if(health != 100) {
-                health += 1;
-                healthLabel.setText(String.format("%02d", health));
-            }
+			// Regen health every second
+			if (Player.soup) {
+				health += 2;
+			}
+			health += 1;
+			if (health > 100) {
+				health = 100;
+			}
+			healthLabel.setText(String.format("%02d", health));
             //Gain point every second
             score += 1;
             scoreLabel.setText(String.format("%03d", score));
@@ -115,6 +143,8 @@ public class Hud implements Disposable {
 
             //Check if a points boundary is met
             SkillTree.pointsCheck(score);
+
+            //TEAM 17--Remove a second each second (weather timer)
         }
     }
 
@@ -159,6 +189,15 @@ public class Hud implements Disposable {
      */
     public static void changeCoinsMulti(int value) {
         coinMulti = coinMulti * value;
+    }
+    
+    /**
+     * Changes Powerup Text - use empty string to make disappear
+     * 
+     * @param type the text to be displayed as the power up type
+     */
+    public static void setPowerupType(String type) {
+    	powerupTypeText.setText(type);
     }
 
     /**
