@@ -57,6 +57,12 @@ public class AssetTesting {
                 .internal("hud/hudBG.png").exists());
     }    
     
+    @Test
+    public void shopBackgroundExists() {
+        assertTrue("does shopBackground.jpg asset exist", Gdx.files
+                .internal("hud/shopBackground.jpg").exists());
+    }    
+    
     //MAP ASSETS TESTS IN MapAssets.java
     
     //SHIPS&COLLEGES ASSETS

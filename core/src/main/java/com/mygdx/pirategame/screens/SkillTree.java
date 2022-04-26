@@ -73,7 +73,7 @@ public class SkillTree implements Screen {
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
         //Create texture for background image
-        background = new Texture("hud/shopScreen.jpg"); 
+        background = new Texture("hud/shopBackground.jpg"); 
         backgroundImg = new Image(background);
         backgroundImg.setFillParent(true);
         //Create a table for the background image
