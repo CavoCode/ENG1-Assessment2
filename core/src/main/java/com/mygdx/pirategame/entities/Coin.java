@@ -36,14 +36,14 @@ public class Coin extends Entity {
      * @param screen the screen its going onto
      * @param x      the x value to be placed at
      * @param y      the y value to be placed at
-     * @param sunken whether it is a submerged coin or not (true=it is)
+     * @param sunken whether it is submerged or not (true=it is)
      */
     public Coin(GameScreen screen, float x, float y, Boolean sunken) {
         super(screen, x, y);
 
         //Team 17--
-        this.floating = true;
         this.sunken = sunken;
+        this.floating = !sunken;
         //---------
 
         //Set coin image
