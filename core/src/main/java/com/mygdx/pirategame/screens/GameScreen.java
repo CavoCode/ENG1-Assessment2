@@ -29,6 +29,7 @@ import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.entities.Fire;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
+import com.mygdx.pirategame.screens.MainMenu;
 
 import java.util.Random;
 
@@ -53,6 +54,7 @@ public class GameScreen implements Screen {
     * Change to allow packages to work - made PirateGame game public to other packages
     */
     public static PirateGame game;
+    private MainMenu mainMenu;
     private OrthographicCamera camera;
     private Viewport viewport;
     private final Stage stage;
@@ -78,6 +80,7 @@ public class GameScreen implements Screen {
     
     private static ArrayList<Fire> fires = new ArrayList<>();
     private long lastFire;
+    private String difficulty;
     //------------
 
     public static final int GAME_RUNNING = 0;
@@ -102,6 +105,9 @@ public class GameScreen implements Screen {
         camera.zoom = 0.0155f;
         viewport = new ScreenViewport(camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+        
+        // Initialize difficulty
+        difficulty = MainMenu.getDifficulty();
 
         // Initialize a hud
         hud = new Hud(game.batch);
@@ -372,6 +378,15 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * 
+     * @param mode - difficulty the game should follow set by player
+     */
+    public void setDifficulty(String mode) {
+    	difficulty = mode;
+    }
+    
+    
     /**
      * Updates the state of each object with delta time
      *
@@ -768,8 +783,6 @@ public class GameScreen implements Screen {
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);
             }
-            
         }
     }
-    
 }

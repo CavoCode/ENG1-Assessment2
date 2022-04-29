@@ -24,10 +24,12 @@ import com.mygdx.pirategame.main.PirateGame;
 public class MainMenu implements Screen {
 
     private final PirateGame parent;
+    private GameScreen gameScreen;
     private final Stage stage;
     private ShapeRenderer shapeRenderer;
     private Image backgroundImg;
     private Texture background;
+    public static String difficulty;
 
     /**
      * Instantiates a new Main menu.
@@ -61,7 +63,7 @@ public class MainMenu implements Screen {
         stage.addActor(backgroundImg);
         
         // Create a table for the buttons
-        Table table = new Table();
+        final Table table = new Table();
         table.setFillParent(true);
         stage.addActor(table);
 
@@ -82,16 +84,67 @@ public class MainMenu implements Screen {
         table.add(options).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
+        
+        // Create a table for difficulty buttons
+        final Table difficultyTable = new Table();
+        difficultyTable.setFillParent(true);
+        stage.addActor(difficultyTable);
+        
+        // Create difficulty buttons
+        TextButton easy = new TextButton("Easy Mode", skin);
+        TextButton normal = new TextButton("Normal Mode", skin);
+        TextButton hard = new TextButton("Hard Mode", skin);
 
+        // Add buttons to difficulty table
+        difficultyTable.add(easy).fillX().uniformX();
+        difficultyTable.row().pad(10, 0, 10, 0);
+        difficultyTable.add(normal).fillX().uniformX();
+        difficultyTable.row();
+        difficultyTable.add(hard).fillX().uniformX();
+        difficultyTable.row();
+        
+        // Set difficulty table invisible for now
+        difficultyTable.setVisible(false);
+        
         //add listeners to the buttons
 
-        //Start a game
+        //Start a game - ask for difficulty
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor){
+            	table.setVisible(false);
+            	difficultyTable.setVisible(true);
+                //parent.changeScreen(PirateGame.GAME);
+            }
+        });
+        
+        //Start an easy game
+        easy.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+            	difficulty = "easy";
                 parent.changeScreen(PirateGame.GAME);
             }
         });
+        
+      //Start an normal game
+        normal.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+            	difficulty = "normal";
+                parent.changeScreen(PirateGame.GAME);
+            }
+        });
+        
+      //Start an hard game
+        hard.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor){
+            	difficulty = "hard";
+                parent.changeScreen(PirateGame.GAME);
+            }
+        });
+        
         //Help Screen
         help.addListener(new ChangeListener() {
             @Override
@@ -117,6 +170,10 @@ public class MainMenu implements Screen {
             }
         });
 
+    }
+    
+    public static String getDifficulty() {
+    	return difficulty;
     }
 
     /**
