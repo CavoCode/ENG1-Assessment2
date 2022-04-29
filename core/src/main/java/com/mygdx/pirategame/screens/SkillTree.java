@@ -2,8 +2,10 @@ package com.mygdx.pirategame.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -46,6 +48,10 @@ public class SkillTree implements Screen {
     private Image backgroundImg;
     private Texture background;
     
+    // create label to display coin balance
+ 	private Texture coinPic;
+ 	private Image coin;
+ 	private static Label coinLabel;
 
     /**
      * Instantiates a new Skill tree.
@@ -63,6 +69,8 @@ public class SkillTree implements Screen {
         states.add(1);
         states.add(1);
         states.add(1);
+        
+       
     }
     /**
      * What should be displayed on the skill tree screen
@@ -72,6 +80,7 @@ public class SkillTree implements Screen {
     public void show() {
         //Set the input processor
         Gdx.input.setInputProcessor(stage);
+        
         //Create texture for background image
         background = new Texture("hud/shopBackground.jpg"); 
         backgroundImg = new Image(background);
@@ -84,6 +93,16 @@ public class SkillTree implements Screen {
         backgroundTable.add(backgroundImg);
         //setVisible here
         stage.addActor(backgroundImg);
+        
+        //add coin labels
+        coinPic = new Texture("coin.png");
+		coin = new Image(coinPic);
+		coinLabel = new Label(String.format("%03d", Hud.getCoins()), new Label.LabelStyle(new BitmapFont(), Color.YELLOW));
+        // Create table for coin label
+     	Table tableCoin = new Table();
+     	tableCoin.setFillParent(true);
+     	stage.addActor(tableCoin);
+        
         // Create a table that fills the screen
         Table table = new Table();
         table.center();
@@ -109,7 +128,7 @@ public class SkillTree implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	Hud.changeHealth(20);
-            	
+            	Hud.changeCoins(-5);
             }
         });
 
@@ -137,7 +156,7 @@ public class SkillTree implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	Hud.changeMaxHealth(10);
-            	Hud.changeCoins(-10);
+            	Hud.changeCoins(-15);
             }
         });
 
@@ -149,7 +168,7 @@ public class SkillTree implements Screen {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
             	GameScreen.changeDamage(5);
-            	Hud.changeCoins(-5);
+            	Hud.changeCoins(-20);
             }
         });
         GoldMultiplier = new TextButton("Gold Multiplier x2", skin);  
@@ -161,16 +180,16 @@ public class SkillTree implements Screen {
             public void changed(ChangeEvent event, Actor actor) {
             	 //change gold multiplier 
             	Hud.changeCoinsMulti(2);
-            	Hud.changeCoins(-50);
+            	Hud.changeCoins(-25);
             }
         });
 
-        //Point unlock labels
-        final Label unlock25 = new Label("$25",skin);
-        final Label unlock50 = new Label("$50",skin);
-        final Label unlock75 = new Label("$75",skin);
-        final Label unlock100 = new Label("$100",skin);
-        
+        // Point unlock labels
+     	final Label unlock5 = new Label("$5", skin);
+     	final Label unlock10 = new Label("$10", skin);
+     	final Label unlock15 = new Label("$15", skin);
+     	final Label unlock20 = new Label("$20", skin);
+     	final Label unlock25 = new Label("$25", skin);
         
         //Return Button
         TextButton backButton = new TextButton("Return", skin);
@@ -182,22 +201,27 @@ public class SkillTree implements Screen {
                 parent.changeScreen(PirateGame.GAME); //Return to game
             }
         });
-
+        
+        // add table with coin balance
+     	tableCoin.add(coin).width(32).height(32).padTop(15).padRight(5);
+     	tableCoin.add(coinLabel).padTop(20).top().right().padRight(40);
+     	tableCoin.row();
+     	tableCoin.top().right();
         //add buttons and labels to main table
         table.add(HealHealth);
-        table.add(unlock25);
+        table.add(unlock5);
         table.row().pad(10, 0, 10, 0);
         table.add(Acceleration);
-        table.add(unlock50);
+        table.add(unlock10);
         table.row().pad(10, 0, 10, 0);
         table.add(ExtraLives);
-        table.add(unlock75);
+        table.add(unlock15);
         table.row().pad(10, 0, 10, 0);
         table.add(CannonDamage);
-        table.add(unlock100);
+        table.add(unlock20);
         table.row().pad(10, 0, 10, 0);
         table.add(GoldMultiplier);
-        table.add(unlock100);
+        table.add(unlock25);
         table.row().pad(10, 0, 10, 0);
         table.center();
 
@@ -219,9 +243,9 @@ public class SkillTree implements Screen {
     	        else if(states.get(1) == 1 && points >= 50 && Hud.getCoins() >= 10){
     	            states.set(1, 0);
     	        }
-    	        else if(states.get(2) == 1 && points >= 15 && Hud.getCoins() >= 10){
+    	        else if(states.get(2) == 1 && points >= 15 && Hud.getCoins() >= 15){
     	            states.set(2, 0);
-    	        }else if(states.get(3) == 1 && points >= 10 && Hud.getCoins() >= 5){
+    	        }else if(states.get(3) == 1 && points >= 10 && Hud.getCoins() >= 20){
     	            states.set(3, 0);
     	        }else if(states.get(4) == 1 && points >= 100 && Hud.getCoins() >= 25){
     	            states.set(4, 0);
