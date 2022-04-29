@@ -26,7 +26,7 @@ public class Player extends Sprite {
     private Array<CannonFire> cannonBalls;
     public static float dragFactor = 1.0f;
     private static float maxSpeed = 5.0f + dragFactor;
-    private static float accel = 0.05f;
+    private static float accel = 0.08f;
     private float angle;
     private boolean astral;
     private Vector2 astralPos;
@@ -288,6 +288,11 @@ public class Player extends Sprite {
             fdef.shape = shape;
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
+
+            //Speeds up
+            dragFactor = 2.5f;
+    	    maxSpeed = 9.0f + dragFactor;
+    	    accel = 0.2f;
     	}
     }
     
@@ -323,6 +328,11 @@ public class Player extends Sprite {
             fdef.shape = shape;
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
+
+            //Slows down
+            dragFactor = 1.0f;
+    	    maxSpeed = 5.0f + dragFactor;
+    	    accel = 0.08f;
     	}
     }
 
@@ -334,8 +344,8 @@ public class Player extends Sprite {
     	if (!soup) {
     		soup = true;
     		dragFactor = 2.0f;
-    	    maxSpeed = 10.0f + dragFactor;
-    	    accel = 0.15f;
+    	    maxSpeed = 7.0f + dragFactor;
+    	    accel = 0.11f;
     	}
     }
     
@@ -347,7 +357,7 @@ public class Player extends Sprite {
     		soup = false;
     	    dragFactor = 1.0f;
     	    maxSpeed = 5.0f + dragFactor;
-    	    accel = 0.05f;
+    	    accel = 0.08f;
     	}
     }
     //----------------------
@@ -364,5 +374,25 @@ public class Player extends Sprite {
         super.draw(batch);
         for(CannonFire ball : cannonBalls)
             ball.draw(batch);
+    }
+
+    /**
+     * Team 17
+     * Changes max speed
+     * Replaces previous
+     * @param speed the new maxSpeed
+     */
+    public void changeMaxSpeed(Float speed){
+        maxSpeed = speed + dragFactor;
+    }
+
+    /**
+     * Team 17
+     * Changes max acceleration
+     * replaces previous
+     * @param acceleration the new accel
+     */
+    public void changeAcceleration(Float acceleration){
+        accel = acceleration;
     }
 }

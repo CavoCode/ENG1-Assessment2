@@ -29,8 +29,11 @@ import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.entities.Fire;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
+import com.mygdx.pirategame.screens.MainMenu;
 
 import java.util.Random;
+
+import javax.print.event.PrintEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,6 +56,7 @@ public class GameScreen implements Screen {
     * Change to allow packages to work - made PirateGame game public to other packages
     */
     public static PirateGame game;
+    private MainMenu mainMenu;
     private OrthographicCamera camera;
     private Viewport viewport;
     private final Stage stage;
@@ -78,6 +82,7 @@ public class GameScreen implements Screen {
     
     private static ArrayList<Fire> fires = new ArrayList<>();
     private long lastFire;
+    private String difficulty;
     //------------
 
     public static final int GAME_RUNNING = 0;
@@ -102,9 +107,12 @@ public class GameScreen implements Screen {
         camera.zoom = 0.0155f;
         viewport = new ScreenViewport(camera);
         camera.position.set(viewport.getWorldWidth() / 2, viewport.getWorldHeight() / 2, 0);
+        
+        // Initialize difficulty
+        difficulty = MainMenu.getDifficulty();
 
         // Initialize a hud
-        hud = new Hud(game.batch);
+        hud = new Hud(game.batch, this);
 
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
@@ -336,8 +344,8 @@ public class GameScreen implements Screen {
             	impulseY -= 1;	
             }
             player.applyImpuse(impulseX, impulseY);
-            // Cannon fire on 'E'
-            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            // Cannon fire on 'Space bar'
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 player.fire();
             }
             //----------------------
@@ -372,6 +380,15 @@ public class GameScreen implements Screen {
         }
     }
 
+    /**
+     * 
+     * @param mode - difficulty the game should follow set by player
+     */
+    public void setDifficulty(String mode) {
+    	difficulty = mode;
+    }
+    
+    
     /**
      * Updates the state of each object with delta time
      *
@@ -734,7 +751,7 @@ public class GameScreen implements Screen {
      * Activates the weather event functions in other classes
      * Used only by Hud.update()
      */
-    public static void weather(Boolean x) {
+    public void weather(Boolean x) {
         if (x){
             //Turns on all coins and powerups
             for (int i = 0; i < Coins.size(); i++){
@@ -745,11 +762,12 @@ public class GameScreen implements Screen {
             }
 
             //Player De-buffs (speed and accel)
-            changeAcceleration(-15F);
-            changeMaxSpeed(-15F);
+            player.changeAcceleration(0.05f);
+            player.changeMaxSpeed(4f);
+            
             //Slows enemy ship speed
             for (int i = 0; i < ships.size(); i++){
-                ships.get(i).changeSpeed(0.8F);
+                ships.get(i).changeSpeed(0.7F);
             }
         }
         else{
@@ -762,14 +780,12 @@ public class GameScreen implements Screen {
             }
 
             //Player Re-buffs (speed and accel)
-            changeAcceleration(15F);
-            changeMaxSpeed(15F);
+            player.changeAcceleration(0.08f);
+            player.changeMaxSpeed(5f);
             //Changes enemy ship speed back to normal
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);
             }
-            
         }
     }
-    
 }
