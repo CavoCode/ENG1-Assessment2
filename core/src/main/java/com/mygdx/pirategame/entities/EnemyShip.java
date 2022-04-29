@@ -279,6 +279,7 @@ public class EnemyShip extends Enemy {
     }
 
     /**
+     * Team 17
      * Changes the speed of movement of the ship
      * Only used by Gamescreen.weather()
      * @param speedChange

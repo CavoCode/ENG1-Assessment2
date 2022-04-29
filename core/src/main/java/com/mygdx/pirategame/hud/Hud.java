@@ -1,5 +1,6 @@
 package com.mygdx.pirategame.hud;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -21,6 +22,8 @@ import com.mygdx.pirategame.screens.GameScreen;
  *@version 1.0
  */
 public class Hud implements Disposable {
+    private GameScreen screen; //Team 17
+
     public static Stage stage;
     private Viewport viewport;
 
@@ -53,7 +56,8 @@ public class Hud implements Disposable {
      *
      * @param sb Batch of images used in the hud
      */
-    public Hud(SpriteBatch sb) {
+    public Hud(SpriteBatch sb, GameScreen screen) {
+        this.screen = screen; //Team 17
         health = 100;
         score = 0;
         coins = 0;
@@ -164,10 +168,10 @@ public class Hud implements Disposable {
             }
 
             //Checks to see if the weather counter has passed either boundary
-            if (weatherTimer > 100){
+            if (weatherTimer > 50){
                 //starts weather event
                 weatherTimer = 100;
-                GameScreen.weather(true);
+                screen.weather(true);
                 weather.setVisible(true);
                 //starts counting down
                 countDown = true;
@@ -177,7 +181,7 @@ public class Hud implements Disposable {
             else if (weatherTimer < 0){
                 //Stops weather event
                 weatherTimer = 0;
-                GameScreen.weather(false);
+                screen.weather(false);
                 weather.setVisible(false);
                 //Starts counting up
                 countDown = false;

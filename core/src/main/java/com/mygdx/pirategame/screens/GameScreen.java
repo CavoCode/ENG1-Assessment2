@@ -33,6 +33,8 @@ import com.mygdx.pirategame.screens.MainMenu;
 
 import java.util.Random;
 
+import javax.print.event.PrintEvent;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -110,7 +112,7 @@ public class GameScreen implements Screen {
         difficulty = MainMenu.getDifficulty();
 
         // Initialize a hud
-        hud = new Hud(game.batch);
+        hud = new Hud(game.batch, this);
 
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
@@ -342,8 +344,8 @@ public class GameScreen implements Screen {
             	impulseY -= 1;	
             }
             player.applyImpuse(impulseX, impulseY);
-            // Cannon fire on 'E'
-            if (Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            // Cannon fire on 'Space bar'
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                 player.fire();
             }
             //----------------------
@@ -749,7 +751,7 @@ public class GameScreen implements Screen {
      * Activates the weather event functions in other classes
      * Used only by Hud.update()
      */
-    public static void weather(Boolean x) {
+    public void weather(Boolean x) {
         if (x){
             //Turns on all coins and powerups
             for (int i = 0; i < Coins.size(); i++){
@@ -760,11 +762,12 @@ public class GameScreen implements Screen {
             }
 
             //Player De-buffs (speed and accel)
-            changeAcceleration(-15F);
-            changeMaxSpeed(-15F);
+            player.changeAcceleration(0.05f);
+            player.changeMaxSpeed(4f);
+            
             //Slows enemy ship speed
             for (int i = 0; i < ships.size(); i++){
-                ships.get(i).changeSpeed(0.8F);
+                ships.get(i).changeSpeed(0.7F);
             }
         }
         else{
@@ -777,8 +780,8 @@ public class GameScreen implements Screen {
             }
 
             //Player Re-buffs (speed and accel)
-            changeAcceleration(15F);
-            changeMaxSpeed(15F);
+            player.changeAcceleration(0.08f);
+            player.changeMaxSpeed(5f);
             //Changes enemy ship speed back to normal
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);
