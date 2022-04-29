@@ -12,18 +12,21 @@ import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
 
+import java.util.Random;
+
 /**
  * Enemy Ship
  * Generates enemy ship data
  * Instantiates an enemy ship
  *
- *@author Ethan Alabaster, Sam Pearson, Edward Poulter
- *@version 1.0
+ *@author Ethan Alabaster, Sam Pearson, Edward Poulter, Team17 - Michael Cavaciuti
+ *@version 2.0
  */
 public class EnemyShip extends Enemy {
     private Texture enemyShip;
     public String college;
-    private final Vector2 orgCord;
+    public Random rand = new Random();
+    private float movingTime = 0;
     private Sound destroy;
     private Sound hit;
 
@@ -48,7 +51,6 @@ public class EnemyShip extends Enemy {
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
-        orgCord = b2body.getPosition();
         damage = 20;
     }
 
@@ -83,25 +85,14 @@ public class EnemyShip extends Enemy {
         if(health <= 0) {
             setToDestroy = true;
         }
-
-        //Team17 Start of Change - Ai tracking
-        Vector2 target = screen.getPlayerPos();
-        if ((target.x <= b2body.getPosition().x - 30 && target.x >= b2body.getPosition().x + 30) && (target.y <= b2body.getPosition().y - 30 && target.y >= b2body.getPosition().y + 30)) {
-        	target.sub(b2body.getPosition());
-            target.nor();
-            float speed = 1.5f;
-            b2body.setLinearVelocity(target.scl(speed));
-        }
+        //Team17 Start of Change
         else {
-        	if(b2body.getPosition() != orgCord) {
-        		orgCord.sub(b2body.getPosition());
-        		orgCord.nor();
-                float speed = 1.5f;
-                b2body.setLinearVelocity(orgCord.scl(speed));
-        	}
+        	//As ship is not destroyed continue tracking player or move accordingly
+        	aiTracking(dt);
         }
-       
-    }
+        //Team17 End of Change
+   }
+    
 
     /**
      * Constructs the ship batch
@@ -135,10 +126,11 @@ public class EnemyShip extends Enemy {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.ENEMY_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT;
+        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.PLAYER_BIT | PirateGame.FIRE_BIT | PirateGame.ENEMY_BIT | PirateGame.CANNON_BIT;
         fdef.shape = shape;
-        fdef.restitution = 0.7f;
+        fdef.restitution = 0.5f;
         b2body.createFixture(fdef).setUserData(this);
+        
     }
 
     /**
@@ -158,8 +150,122 @@ public class EnemyShip extends Enemy {
         Hud.changePoints(5);
     }
 
+    //Team17 Start of Change - Ai movement
     /**
-     * Updates the ship image. Particuarly change texture on college destruction
+     * Updates enemy movement according to delta time or player position 
+     * Checks valid movement
+     * @param dt - delta time
+     */
+    private void aiTracking(float dt) {
+    	//set movingTime as a timer for enemy movement to change when in idle state
+    	movingTime += dt;
+    	
+    	//Movement is carried out as long as enemy ship is not affiliated with player team
+    	if(college != "Alcuin") {
+    		//Retrieve players positional vector
+	    	Vector2 target = screen.getPlayerPos();
+	    	//Check if enemy is within a certain area of player
+	        if ((target.x >= b2body.getPosition().x - 4 && target.x <= b2body.getPosition().x + 4) && (target.y >= b2body.getPosition().y - 4 && target.y <= b2body.getPosition().y + 4)) {
+	        	//Move towards player (target) when in range
+	        	moveToCord(target, 1.5f);
+	        }
+	        //If not in range, move according to college affiliation
+	        else {
+	        	//If an unaligned ship (no affiliation) move randomly anywhere on the map
+	        	if(college == "Unaligned") {
+	        		if(movingTime >= 3.5f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y cords
+		        			ranX = rand.nextInt(AvailableSpawn.xCap - AvailableSpawn.xBase) + AvailableSpawn.xBase;
+		        			ranY = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 1f);
+		        		movingTime = 0.0f;
+	        		}
+	        		
+	        	}
+	        	else if (college == "Goodricke") {
+	        		if(movingTime >= 2f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y cords
+		        			ranX = rand.nextInt(2000) - 1000;
+		                    ranY = rand.nextInt(2000) - 1000;
+		                    ranX = (int)Math.floor((1760 / PirateGame.PPM) + (ranX / PirateGame.PPM));
+		                    ranY = (int)Math.floor((6767 / PirateGame.PPM) + (ranY / PirateGame.PPM));
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        	}
+	        	else if (college == "Constantine") {
+	        		if(movingTime >= 2f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y cords
+		        			ranX = rand.nextInt(2000) - 1000;
+		                    ranY = rand.nextInt(2000) - 1000;
+		                    ranX = (int)Math.floor((6240 / PirateGame.PPM) + (ranX / PirateGame.PPM));
+		                    ranY = (int)Math.floor((6703 / PirateGame.PPM) + (ranY / PirateGame.PPM));
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        	}
+	        	else if (college == "Anne Lister") {
+	        		if(movingTime >= 2f + Math.random()) {
+		        		int ranX = 0;
+		        		int ranY = 0;
+		        		boolean validLoc = false;
+		        		while (!validLoc) {
+		                    //Get random x and y cords
+		        			ranX = rand.nextInt(2000) - 1000;
+		                    ranY = rand.nextInt(2000) - 1000;
+		                    ranX = (int)Math.floor((6304 / PirateGame.PPM) + (ranX / PirateGame.PPM));
+		                    ranY = (int)Math.floor((1199 / PirateGame.PPM) + (ranY / PirateGame.PPM));
+		                    validLoc = screen.checkGenPos(ranX, ranY);
+		        		} 
+		                Vector2 randomCord = new Vector2(ranX,ranY);
+		        		moveToCord(randomCord, 0.5f);
+		        		movingTime = 0.0f;
+	        		}
+	        	}
+	        }
+        }
+	}
+    
+    /**
+     * 
+     * Move enemy ship towards a given target coordinate at a certain speed
+     * 
+     * @param cordTemp - Target coordinate to move enemy towards
+     * @param speed - Speed at which enemy should move
+     */
+    private void moveToCord(Vector2 cordTemp, float speed) { 
+    	//Subtract enemy positional vector from given target vector
+    	cordTemp.sub(b2body.getPosition());
+    	//Normalise vector
+    	cordTemp.nor();
+    	//Set linear velocity towards target vector as scalar with given speed
+        b2body.setLinearVelocity(cordTemp.scl(speed));
+    }
+    //Team17 End of Change
+    
+    /**
+     * Updates the ship image. Particularly change texture on college destruction
      *
      * @param alignment Associated college
      * @param path Path of new texture

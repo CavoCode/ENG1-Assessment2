@@ -62,6 +62,12 @@ public class AssetTesting {
         assertTrue("does weathering.png asset exist", Gdx.files
                 .internal("hud/weathering.png").exists());
     }    
+    
+    @Test
+    public void mainMenuBackgroundExists() {
+        assertTrue("does mainScreen.jpg asset exist", Gdx.files
+                .internal("hud/mainScreen.jpg").exists());
+    }    
 
     
     

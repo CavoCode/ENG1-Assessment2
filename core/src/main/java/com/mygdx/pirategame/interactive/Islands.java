@@ -1,6 +1,7 @@
 package com.mygdx.pirategame.interactive;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Rectangle;
+import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
@@ -31,6 +32,8 @@ public class Islands extends InteractiveTileObject {
     public void onContact() {
         Gdx.app.log("island", "collision");
         //Deal damage to the boat
-        Hud.changeHealth(-10);
+        if (!Player.rubber) {
+        	Hud.changeHealth(-10);
+        }
     }
 }
