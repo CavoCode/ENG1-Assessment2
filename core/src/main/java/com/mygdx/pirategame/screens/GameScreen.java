@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
 
-    private Player player;
+    private static Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
     private static ArrayList<EnemyShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
@@ -112,7 +112,7 @@ public class GameScreen implements Screen {
         difficulty = MainMenu.getDifficulty();
 
         // Initialize a hud
-        hud = new Hud(game.batch, this);
+        hud = new Hud(game.batch);
 
         // Initialising box2d physics
         world = new World(new Vector2(0,0), true);
@@ -131,13 +131,13 @@ public class GameScreen implements Screen {
         // Spawning enemy ship and coin. x and y is spawn location
         colleges = new HashMap<>();
         colleges.put("Alcuin", new College(this, "Alcuin", 1900 / PirateGame.PPM, 2100 / PirateGame.PPM,
-                "ships&colleges/alcuin_flag.png", "ships&colleges/alcuin_ship.png", 0, invalidSpawn));
+                "ships&colleges/alcuin_flag.png", "ships&colleges/alcuin_ship.png", 0, invalidSpawn, difficulty));
         colleges.put("Anne Lister", new College(this, "Anne Lister", 6304 / PirateGame.PPM, 1199 / PirateGame.PPM,
-                "ships&colleges/anne_lister_flag.png", "ships&colleges/anne_lister_ship.png", 8, invalidSpawn));
+                "ships&colleges/anne_lister_flag.png", "ships&colleges/anne_lister_ship.png", 8, invalidSpawn, difficulty));
         colleges.put("Constantine", new College(this, "Constantine", 6240 / PirateGame.PPM, 6703 / PirateGame.PPM,
-                "ships&colleges/constantine_flag.png", "ships&colleges/constantine_ship.png", 8, invalidSpawn));
+                "ships&colleges/constantine_flag.png", "ships&colleges/constantine_ship.png", 8, invalidSpawn, difficulty));
         colleges.put("Goodricke", new College(this, "Goodricke", 1760 / PirateGame.PPM, 6767 / PirateGame.PPM,
-                "ships&colleges/goodricke_flag.png", "ships&colleges/goodricke_ship.png", 8, invalidSpawn));
+                "ships&colleges/goodricke_flag.png", "ships&colleges/goodricke_ship.png", 8, invalidSpawn, difficulty));
         ships = new ArrayList<>();
         ships.addAll(colleges.get("Alcuin").fleet);
         ships.addAll(colleges.get("Anne Lister").fleet);
@@ -158,7 +158,7 @@ public class GameScreen implements Screen {
                 validLoc = checkGenPos(a, b);
             }
             //Add a ship at the random coords
-            ships.add(new EnemyShip(this, a, b, "ships&colleges/unaligned_ship.png", "Unaligned"));
+            ships.add(new EnemyShip(this, a, b, "ships&colleges/unaligned_ship.png", "Unaligned", difficulty));
         }
 
         //Random coins
@@ -379,15 +379,6 @@ public class GameScreen implements Screen {
             }
         }
     }
-
-    /**
-     * 
-     * @param mode - difficulty the game should follow set by player
-     */
-    public void setDifficulty(String mode) {
-    	difficulty = mode;
-    }
-    
     
     /**
      * Updates the state of each object with delta time
@@ -751,7 +742,7 @@ public class GameScreen implements Screen {
      * Activates the weather event functions in other classes
      * Used only by Hud.update()
      */
-    public void weather(Boolean x) {
+    public static void weather(Boolean x) {
         if (x){
             //Turns on all coins and powerups
             for (int i = 0; i < Coins.size(); i++){
@@ -762,8 +753,7 @@ public class GameScreen implements Screen {
             }
 
             //Player De-buffs (speed and accel)
-            player.changeAcceleration(0.05f);
-            player.changeMaxSpeed(4f);
+            player.setAcceleration(0.05f);
             
             //Slows enemy ship speed
             for (int i = 0; i < ships.size(); i++){
@@ -780,8 +770,7 @@ public class GameScreen implements Screen {
             }
 
             //Player Re-buffs (speed and accel)
-            player.changeAcceleration(0.08f);
-            player.changeMaxSpeed(5f);
+            player.setAcceleration(0.08f);
             //Changes enemy ship speed back to normal
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);
