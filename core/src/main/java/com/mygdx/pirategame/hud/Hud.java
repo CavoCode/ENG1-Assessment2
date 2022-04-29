@@ -1,6 +1,5 @@
 package com.mygdx.pirategame.hud;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -22,14 +21,13 @@ import com.mygdx.pirategame.screens.GameScreen;
  *@version 1.0
  */
 public class Hud implements Disposable {
-    private GameScreen screen; //Team 17
-
     public static Stage stage;
     private Viewport viewport;
 
     private float timeCount;
     private static Integer score;
     private static Integer health;
+    private static Integer maxHealth;
     private Texture hp;
     private Texture boxBackground;
     private Texture coinPic;
@@ -56,9 +54,9 @@ public class Hud implements Disposable {
      *
      * @param sb Batch of images used in the hud
      */
-    public Hud(SpriteBatch sb, GameScreen screen) {
-        this.screen = screen; //Team 17
-        health = 100;
+    public Hud(SpriteBatch sb) {
+    	maxHealth = 100;
+    	health = maxHealth;
         score = 0;
         coins = 0;
         coinMulti = 1;
@@ -143,8 +141,8 @@ public class Hud implements Disposable {
 				health += 2;
 			}
 			health += 1;
-			if (health > 100) {
-				health = 100;
+			if (health > maxHealth) {
+				health = maxHealth;
 			}
 			healthLabel.setText(String.format("%02d", health));
             //Gain point every second
@@ -168,10 +166,10 @@ public class Hud implements Disposable {
             }
 
             //Checks to see if the weather counter has passed either boundary
-            if (weatherTimer > 50){
+            if (weatherTimer > 100){
                 //starts weather event
                 weatherTimer = 100;
-                screen.weather(true);
+                GameScreen.weather(true);
                 weather.setVisible(true);
                 //starts counting down
                 countDown = true;
@@ -181,7 +179,7 @@ public class Hud implements Disposable {
             else if (weatherTimer < 0){
                 //Stops weather event
                 weatherTimer = 0;
-                screen.weather(false);
+                GameScreen.weather(false);
                 weather.setVisible(false);
                 //Starts counting up
                 countDown = false;
@@ -200,6 +198,11 @@ public class Hud implements Disposable {
     public static void changeHealth(int value) {
         health += value;
         healthLabel.setText(String.format("%02d", health));
+    }
+    
+    public static void changeMaxHealth(int value) {
+    	maxHealth = value;
+        healthLabel.setText(String.format("%02d", maxHealth));
     }
 
     /**
@@ -281,5 +284,6 @@ public class Hud implements Disposable {
     public void dispose() {
         stage.dispose();
     }
+
 }
 
