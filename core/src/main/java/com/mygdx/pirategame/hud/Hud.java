@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.screens.SkillTree;
+import com.mygdx.pirategame.screens.GameScreen;
 
 /**
  * Hud
@@ -30,6 +31,9 @@ public class Hud implements Disposable {
     private Texture boxBackground;
     private Texture coinPic;
     private Texture weatherHud; //Team 17
+    public static Integer weatherTimer; //Team 17 - Change back to private once done testing
+    private static boolean countDown; //Team 17
+    private static Integer pointMulti; //Team 17
 
     private static Label scoreLabel;
     private static Label healthLabel;
@@ -99,24 +103,27 @@ public class Hud implements Disposable {
         table1.add(coinLabel).padTop(20).top().right().padRight(40);
         table1.row();
         table1.add(scoreLabel).padTop(22).top().right().padRight(40);
-        stage.addActor(table4);
-        stage.addActor(table3);
-        stage.addActor(table2);
-        stage.addActor(table1);
+        
 
         //Team 17-----
+        //Setup weather texture
         weatherHud = new Texture("hud/weathering.png"); 
         weather = new Image(weatherHud);
         weather.setFillParent(true);
 
-        Table weatherTable = new Table();
-        weatherTable.top().right();
-        weatherTable.setFillParent(true);
-
-        weatherTable.add(weather);
-        //setVisible here
+        //Add weather texture to screen
         stage.addActor(weather);
+        //Make it invisible
+        weather.setVisible(false);
+
+        countDown = false;
+        weatherTimer = 0;
+        pointMulti = 1;
         //------------
+        stage.addActor(table4);
+        stage.addActor(table3);
+        stage.addActor(table2);
+        stage.addActor(table1);
     }
 
     /**
@@ -144,7 +151,40 @@ public class Hud implements Disposable {
             //Check if a points boundary is met
             SkillTree.pointsCheck(score);
 
-            //TEAM 17--Remove a second each second (weather timer)
+            //TEAM 17-------------
+            
+            //Checks if the weather is counting up or down
+            if (!countDown){
+                //Counts up
+                weatherTimer += 1;
+            }
+            else{
+                //Counts down
+                weatherTimer -= 2;
+            }
+
+            //Checks to see if the weather counter has passed either boundary
+            if (weatherTimer > 100){
+                //starts weather event
+                weatherTimer = 100;
+                GameScreen.weather(true);
+                weather.setVisible(true);
+                //starts counting down
+                countDown = true;
+                //Points gained is doubled
+                pointMulti = 2;
+            }
+            else if (weatherTimer < 0){
+                //Stops weather event
+                weatherTimer = 0;
+                GameScreen.weather(false);
+                weather.setVisible(false);
+                //Starts counting up
+                countDown = false;
+                //Points gained is normal
+                pointMulti = 1;
+            }
+            //------------------
         }
     }
 
@@ -176,7 +216,8 @@ public class Hud implements Disposable {
      * @param value Increase to points
      */
     public static void changePoints(int value) {
-        score += value;
+        //Team 17- added pointMulti
+        score += value * pointMulti;
         scoreLabel.setText(String.format("%03d", score));
         //Check if a points boundary is met
         SkillTree.pointsCheck(score);

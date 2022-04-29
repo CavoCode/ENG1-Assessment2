@@ -29,6 +29,10 @@ public class Powerup extends Entity {
     private boolean destroyed;
     private Sound powerupPickup;
     private long powerupTimeLength = 5000;
+    //For submerged
+    private Texture none;
+    private Boolean floating;
+    private Boolean sunken;
     
     public Random random = new Random();
 
@@ -38,9 +42,15 @@ public class Powerup extends Entity {
      * @param screen the screen its going onto
      * @param x      the x value to be placed at
      * @param y      the y value to be placed at
+     * @param sunken whether it is submerged or not (true=it is)
      */
-    public Powerup(GameScreen screen, float x, float y) {
+    public Powerup(GameScreen screen, float x, float y, Boolean sunken) {
         super(screen, x, y);
+        //Set its state of floating
+        this.sunken = sunken;
+        this.floating = !sunken;
+        //Set invisible texture
+        none = new Texture("null.png");
         //Set powerup image
         powerup = new Texture("powerup3.png");
         //Set the position and size of the powerup
@@ -104,38 +114,41 @@ public class Powerup extends Entity {
      */
     @Override
     public void entityContact() {
-        //ENTER COLLISION CODE HERE
-    	turnOffPowerups();
-    	//renew powerup active countdown which can extend life of some powerups e.g. astral body
-    	GameScreen.setPowerupActivatedTime(TimeUtils.millis());
-    	switch(random.nextInt(5)) {
-    	case 0:
-    		Hud.setPowerupType("Auto Reload");
-    		GameScreen.setPowerupType("Auto Reload");
-    		break;
-    	case 1:
-    		Hud.setPowerupType("Astral Body");
-        	GameScreen.setPowerupType("Astral Body");
-    		break;
-    	case 2:
-    		Hud.setPowerupType("Oil Spill");
-        	GameScreen.setPowerupType("Oil Spill");
-    		break;
-    	case 3:
-    		Hud.setPowerupType("Rubber Coating");
-        	GameScreen.setPowerupType("Rubber Coating");
-    		break;
-    	case 4:
-    		Hud.setPowerupType("Soup");
-        	GameScreen.setPowerupType("Soup");
-    		break;
-    	}
-        //Set to destroy
-        setToDestroyed = true;
-        Gdx.app.log("powerup", "collision");
-        //Play pickup sound
-        if (screen.game.getPreferences().isEffectsEnabled()) {
-        	powerupPickup.play(screen.game.getPreferences().getEffectsVolume());
+        //Checks if powerup is submerged
+        if (floating == true){
+            //ENTER COLLISION CODE HERE
+            turnOffPowerups();
+            //renew powerup active countdown which can extend life of some powerups e.g. astral body
+            GameScreen.setPowerupActivatedTime(TimeUtils.millis());
+            switch(random.nextInt(5)) {
+            case 0:
+                Hud.setPowerupType("Auto Reload");
+                GameScreen.setPowerupType("Auto Reload");
+                break;
+            case 1:
+                Hud.setPowerupType("Astral Body");
+                GameScreen.setPowerupType("Astral Body");
+                break;
+            case 2:
+                Hud.setPowerupType("Oil Spill");
+                GameScreen.setPowerupType("Oil Spill");
+                break;
+            case 3:
+                Hud.setPowerupType("Rubber Coating");
+                GameScreen.setPowerupType("Rubber Coating");
+                break;
+            case 4:
+                Hud.setPowerupType("Soup");
+                GameScreen.setPowerupType("Soup");
+                break;
+            }
+            //Set to destroy
+            setToDestroyed = true;
+            Gdx.app.log("powerup", "collision");
+            //Play pickup sound
+            if (screen.game.getPreferences().isEffectsEnabled()) {
+                powerupPickup.play(screen.game.getPreferences().getEffectsVolume());
+            }
         }
 
     }
@@ -155,6 +168,25 @@ public class Powerup extends Entity {
     public void draw(Batch batch) {
         if(!destroyed) {
             super.draw(batch);
+        }
+    }
+
+    /**
+     * Defines whether the powerup is there or invisible / un-interactable
+     * @param bool true = it is there, false = it is underwater (not there)
+     */
+    public void setVisible(Boolean bool){
+        //Checks if this powerup is able to sink
+        if (sunken){
+            floating = bool;
+            if (!bool){
+                //changes texture to a transparent texture
+                setRegion(none);
+            }
+            else{
+                //changes texture to a coin texture
+                setRegion(powerup);
+            }
         }
     }
 }

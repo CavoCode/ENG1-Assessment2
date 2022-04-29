@@ -71,12 +71,14 @@ public class GameScreen implements Screen {
     private AvailableSpawn invalidSpawn = new AvailableSpawn();
     private Hud hud;
     
+    //Team 17------
     private static ArrayList<Powerup> Powerups = new ArrayList<>();
     private static long powerupActivatedTime;  //Used as common timer for all powerup instances so just has get and set methods
     private static String powerupType;
     
     private static ArrayList<Fire> fires = new ArrayList<>();
     private long lastFire;
+    //------------
 
     public static final int GAME_RUNNING = 0;
     public static final int GAME_PAUSED = 1;
@@ -153,7 +155,7 @@ public class GameScreen implements Screen {
 
         //Random coins
         Coins = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 150; i++) {
             validLoc = false;
             while (!validLoc) {
                 //Get random x and y coords
@@ -161,17 +163,25 @@ public class GameScreen implements Screen {
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
                 validLoc = checkGenPos(a, b);
             }
-            //Add a coins at the random coords
-            Coins.add(new Coin(this, a, b, true));
-        }
-        for (int i = 0; i < Coins.size()/2; i++){
-            Coins.get(i).setVisible(false);
+            //Team 17------------
+            //Weather submerged checker
+            if (i >= 100){
+                //Add a submerge-able coin at the random coords
+                Coin coinTemp = new Coin(this, a, b, true);
+                coinTemp.setVisible(false);
+                Coins.add(coinTemp);
+            }
+            else{
+                //Add a normal coin at the random coords
+                Coins.add(new Coin(this, a, b, false));
+            }
+            //------------------
         }
         
         //-------Team-17--------
         //Random powerups
         Powerups = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 30; i++) {
             validLoc = false;
             while (!validLoc) {
                 //Get random x and y coords
@@ -179,8 +189,17 @@ public class GameScreen implements Screen {
                 b = rand.nextInt(AvailableSpawn.yCap - AvailableSpawn.yBase) + AvailableSpawn.yBase;
                 validLoc = checkGenPos(a, b);
             }
-            //Add a powerup at the random coords
-            Powerups.add(new Powerup(this, a, b));
+            
+            if (i >= 20){
+                //Add a submerge-able powerup at the random coords
+                Powerup powerupTemp = new Powerup(this, a, b,true);
+                powerupTemp.setVisible(false);
+                Powerups.add(powerupTemp);
+            }
+            else{
+                //Add a normal powerup at the random coords
+                Powerups.add(new Powerup(this, a, b,false));
+            }
         }
         //----------------------
 
@@ -327,13 +346,13 @@ public class GameScreen implements Screen {
             //Sinks any sinkable objects
             if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                 for (int i = 0; i < Coins.size(); i++){
-                    Coins.get(i).setVisible(false);
+                    Hud.weatherTimer = -1;
                 }
             }
             //Rises any risable objects
             if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
                 for (int i = 0; i < Coins.size(); i++){
-                    Coins.get(i).setVisible(true);
+                    Hud.weatherTimer = 101;
                 }
             }
             //------------------------------
@@ -712,25 +731,45 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Enacts the entire weather event (currently just holding snippets of code)
+     * Activates the weather event functions in other classes
+     * Used only by Hud.update()
      */
-    public void weather() {
-        
-        //Turns off all coins
-        for (int i = 0; i < Coins.size(); i++){
-            Coins.get(i).setVisible(false);
-        }
-        //Turns on all coins
-        for (int i = 0; i < Coins.size(); i++){
-            Coins.get(i).setVisible(true);
-        }
+    public static void weather(Boolean x) {
+        if (x){
+            //Turns on all coins and powerups
+            for (int i = 0; i < Coins.size(); i++){
+                Coins.get(i).setVisible(true);
+            }
+            for (int i = 0; i < Powerups.size(); i++){
+                Powerups.get(i).setVisible(true);
+            }
 
-        //Player De-buffs (speed and accel)
-        changeAcceleration(-15F);
-        changeMaxSpeed(-15F);
+            //Player De-buffs (speed and accel)
+            changeAcceleration(-15F);
+            changeMaxSpeed(-15F);
+            //Slows enemy ship speed
+            for (int i = 0; i < ships.size(); i++){
+                ships.get(i).changeSpeed(0.8F);
+            }
+        }
+        else{
+            //Turns off all coins and powerups
+            for (int i = 0; i < Coins.size(); i++){
+                Coins.get(i).setVisible(false);
+            }
+            for (int i = 0; i < Powerups.size(); i++){
+                Powerups.get(i).setVisible(false);
+            }
 
-        //Player Re-buffs (speed and accel)
-        changeAcceleration(15F);
-        changeMaxSpeed(15F);
+            //Player Re-buffs (speed and accel)
+            changeAcceleration(15F);
+            changeMaxSpeed(15F);
+            //Changes enemy ship speed back to normal
+            for (int i = 0; i < ships.size(); i++){
+                ships.get(i).changeSpeed(1F);
+            }
+            
+        }
     }
+    
 }

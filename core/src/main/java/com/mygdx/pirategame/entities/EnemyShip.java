@@ -29,6 +29,7 @@ public class EnemyShip extends Enemy {
     private float movingTime = 0;
     private Sound destroy;
     private Sound hit;
+    private Float speed;
 
     /**
      * Instantiates enemy ship
@@ -52,6 +53,7 @@ public class EnemyShip extends Enemy {
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
         damage = 20;
+        speed = 1f;
     }
 
     /**
@@ -260,7 +262,7 @@ public class EnemyShip extends Enemy {
     	//Normalise vector
     	cordTemp.nor();
     	//Set linear velocity towards target vector as scalar with given speed
-        b2body.setLinearVelocity(cordTemp.scl(speed));
+        b2body.setLinearVelocity(cordTemp.scl(speed*this.speed));
     }
     //Team17 End of Change
     
@@ -274,5 +276,14 @@ public class EnemyShip extends Enemy {
         college = alignment;
         enemyShip = new Texture(path);
         setRegion(enemyShip);
+    }
+
+    /**
+     * Changes the speed of movement of the ship
+     * Only used by Gamescreen.weather()
+     * @param speedChange
+     */
+    public void changeSpeed(Float speedChange){
+        speed = speedChange;
     }
 }
