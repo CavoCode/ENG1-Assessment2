@@ -64,6 +64,7 @@ public class WorldContactListener implements ContactListener {
             case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
                     ((Enemy) fixA.getUserData()).onContact();
+                    //((Player) fixB.getUserData()).onContact();
                 }
                 else {
                     ((Enemy) fixB.getUserData()).onContact();

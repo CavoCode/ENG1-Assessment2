@@ -173,6 +173,7 @@ public class EnemyShip extends Enemy {
         health -= damage;
         bar.changeHealth(damage);
         Hud.changePoints(5);
+        
     }
 
     //Team17 Start of Change - Ai movement
