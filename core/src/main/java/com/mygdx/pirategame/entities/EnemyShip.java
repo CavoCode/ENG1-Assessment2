@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.screens.GameScreen;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
@@ -30,6 +31,8 @@ public class EnemyShip extends Enemy {
     private Sound destroy;
     private Sound hit;
     private Float speed;
+    private String difficulty;
+    private Array<CollegeFire> cannonBalls;
 
     /**
      * Instantiates enemy ship
@@ -40,11 +43,13 @@ public class EnemyShip extends Enemy {
      * @param path path of texture file
      * @param assignment College ship is assigned to
      */
-    public EnemyShip(GameScreen screen, float x, float y, String path, String assignment) {
+    public EnemyShip(GameScreen screen, float x, float y, String path, String assignment, String difficultyChosen) {
         super(screen, x, y);
         enemyShip = new Texture(path);
         //Assign college
         college = assignment;
+        //Difficulty assignment
+        difficulty = difficultyChosen;
         //Set audios
         destroy = Gdx.audio.newSound(Gdx.files.internal("sounds/ship-explosion-2.wav"));
         hit = Gdx.audio.newSound(Gdx.files.internal("sounds/ship-hit.wav"));
@@ -52,8 +57,17 @@ public class EnemyShip extends Enemy {
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyShip);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
-        damage = 20;
+        if(difficulty == "easy") {
+        	damage = 10;
+        }
+        else if (difficulty == "normal") {
+        	damage = 15;
+        }
+        else {
+        	damage = 25;
+        }
         speed = 1f;
+        cannonBalls = new Array<>();
     }
 
     /**
@@ -92,6 +106,12 @@ public class EnemyShip extends Enemy {
         	//As ship is not destroyed continue tracking player or move accordingly
         	aiTracking(dt);
         }
+        //Update cannon balls
+        for(CollegeFire ball : cannonBalls) {
+            ball.update(dt);
+            if(ball.isDestroyed())
+                cannonBalls.removeValue(ball, true);
+        }
         //Team17 End of Change
    }
     
@@ -106,6 +126,9 @@ public class EnemyShip extends Enemy {
             super.draw(batch);
             //Render health bar
             bar.render(batch);
+            //Render balls
+            for(CollegeFire ball : cannonBalls)
+                ball.draw(batch);
         }
     }
 
@@ -170,6 +193,12 @@ public class EnemyShip extends Enemy {
 	        if ((target.x >= b2body.getPosition().x - 4 && target.x <= b2body.getPosition().x + 4) && (target.y >= b2body.getPosition().y - 4 && target.y <= b2body.getPosition().y + 4)) {
 	        	//Move towards player (target) when in range
 	        	moveToCord(target, 1.5f);
+	        	if(difficulty != "easy") {
+	        		if (movingTime >= .5f) {
+	        			fire();
+	        			movingTime = 0f;
+	        		}
+	        	}
 	        }
 	        //If not in range, move according to college affiliation
 	        else {
@@ -286,5 +315,12 @@ public class EnemyShip extends Enemy {
      */
     public void changeSpeed(Float speedChange){
         speed = speedChange;
+    }
+    
+    /**
+     * Fires cannonballs
+     */
+    public void fire() {
+        cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
     }
 }

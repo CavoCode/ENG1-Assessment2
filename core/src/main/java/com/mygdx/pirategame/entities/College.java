@@ -41,7 +41,7 @@ public class College extends Enemy {
      * @param ship_no Number of college ships to produce
      * @param invalidSpawn Spawn data to check spawn validity when generating ships
      */
-    public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn) {
+    public College(GameScreen screen, String college, float x, float y, String flag, String ship, int ship_no, AvailableSpawn invalidSpawn, String difficulty) {
         super(screen, x, y);
         this.screen = screen;
         noSpawn = invalidSpawn;
@@ -51,7 +51,15 @@ public class College extends Enemy {
         setBounds(0,0,64 / PirateGame.PPM, 110 / PirateGame.PPM);
         setRegion(enemyCollege);
         setOrigin(32 / PirateGame.PPM,55 / PirateGame.PPM);
-        damage = 10;
+        if(difficulty == "easy") {
+        	damage = 10;
+        }
+        else if (difficulty == "normal") {
+        	damage = 15;
+        }
+        else {
+        	damage = 25;
+        }
         cannonBalls = new Array<>();
         int ranX = 0;
         int ranY = 0;
@@ -67,7 +75,7 @@ public class College extends Enemy {
                 ranY = (int)Math.floor(y + (ranY / PirateGame.PPM));
                 spawnIsValid = getCoord(ranX, ranY);
             }
-            fleet.add(new EnemyShip(screen, ranX, ranY, ship, college));
+            fleet.add(new EnemyShip(screen, ranX, ranY, ship, college, difficulty));
         }
     }
 
