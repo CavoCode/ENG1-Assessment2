@@ -100,6 +100,7 @@ public class GameScreen implements Screen {
      * Initialises the Game Screen,
      * generates the world data and data for entities that exist upon it,
      * @param game passes game data to current class,
+     * @param headless 
      */
     public GameScreen(PirateGame game, boolean headless){
         gameStatus = GAME_RUNNING;

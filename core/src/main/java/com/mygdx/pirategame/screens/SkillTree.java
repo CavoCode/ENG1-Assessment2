@@ -76,6 +76,7 @@ public class SkillTree implements Screen {
         states.add(1);
 
     }
+
     /**
      * What should be displayed on the skill tree screen
      *

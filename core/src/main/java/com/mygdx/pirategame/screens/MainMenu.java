@@ -127,7 +127,7 @@ public class MainMenu implements Screen {
             }
         });
         
-      //Start an normal game
+      //Start a normal game
         normal.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor){
