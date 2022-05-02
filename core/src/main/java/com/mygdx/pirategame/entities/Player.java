@@ -21,6 +21,7 @@ import com.mygdx.pirategame.screens.GameScreen;
 public class Player extends Sprite {
     private final GameScreen screen;
     private Texture ship;
+    private Texture ghostShip;
     public World world;
     public Body b2body;
     private Sound breakSound;
@@ -44,6 +45,7 @@ public class Player extends Sprite {
         // Retrieves world data and creates ship texture
         this.screen = screen;
         ship = new Texture("ships&colleges/player_ship.png");
+        ghostShip = new Texture("ships&colleges/player_ship_ghost.png"); //Team 17 - for astral body func
         this.world = screen.getWorld();
 
         // Defines a player, and the players position on screen and world
@@ -219,6 +221,9 @@ public class Player extends Sprite {
 	        fdef.shape = shape;
 	        b2body.createFixture(fdef).setUserData(this);
 	        b2body.setLinearVelocity(vel);
+
+            //Change texture of ship
+            setRegion(ghostShip);
     	}
     }
     
@@ -252,6 +257,9 @@ public class Player extends Sprite {
             fdef.shape = shape;
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
+
+            //Change texture of ship back to normal
+            setRegion(ship);
     	}
     }
     
