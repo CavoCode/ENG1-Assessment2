@@ -294,14 +294,13 @@ public class GameScreen implements Screen {
                 resume();
             }
         });
-        options.addListener(new ChangeListener() {
+        options.addListener(new ChangeListener(){
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor){
                 pauseTable.setVisible(false);
                 game.setScreen(new Options(game,game.getScreen()));
             }
-        }
-        );
+        });
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
