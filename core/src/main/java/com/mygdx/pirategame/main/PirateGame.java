@@ -94,7 +94,7 @@ public class PirateGame extends Game {
 				break;
 
 			case GAME:
-				if (gameScreen == null) gameScreen = new GameScreen(this);
+
 				if (skillTreeScreen == null) skillTreeScreen = new SkillTree(this, gameScreen.player);
 				this.setScreen(gameScreen);
 				break;

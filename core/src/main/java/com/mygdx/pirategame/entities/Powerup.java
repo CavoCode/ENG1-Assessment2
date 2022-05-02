@@ -122,23 +122,18 @@ public class Powerup extends Entity {
             GameScreen.setPowerupActivatedTime(TimeUtils.millis());
             switch(random.nextInt(5)) {
             case 0:
-                Hud.setPowerupType("Auto Reload");
                 GameScreen.setPowerupType("Auto Reload");
                 break;
             case 1:
-                Hud.setPowerupType("Astral Body");
                 GameScreen.setPowerupType("Astral Body");
                 break;
             case 2:
-                Hud.setPowerupType("Oil Spill");
                 GameScreen.setPowerupType("Oil Spill");
                 break;
             case 3:
-                Hud.setPowerupType("Rubber Coating");
                 GameScreen.setPowerupType("Rubber Coating");
                 break;
             case 4:
-                Hud.setPowerupType("Soup");
                 GameScreen.setPowerupType("Soup");
                 break;
             }
@@ -146,7 +141,7 @@ public class Powerup extends Entity {
             setToDestroyed = true;
             Gdx.app.log("powerup", "collision");
             //Play pickup sound
-            if (screen.game.getPreferences().isEffectsEnabled()) {
+            if (screen.game != null && screen.game.getPreferences().isEffectsEnabled()) {
                 powerupPickup.play(screen.game.getPreferences().getEffectsVolume());
             }
         }
@@ -156,7 +151,6 @@ public class Powerup extends Entity {
      * Makes no powerup active
      */
     private void turnOffPowerups() {
-    	Hud.setPowerupType("");
     	GameScreen.setPowerupType("");
     }
 
@@ -169,6 +163,10 @@ public class Powerup extends Entity {
         if(!destroyed) {
             super.draw(batch);
         }
+    }
+    
+    public boolean isDestroyed() {
+    	return (destroyed);
     }
 
     /**
