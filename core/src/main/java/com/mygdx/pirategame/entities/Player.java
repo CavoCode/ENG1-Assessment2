@@ -28,8 +28,8 @@ public class Player extends Sprite {
     private static float maxSpeed = 5.0f + dragFactor;
     private static float accel = 0.05f;
     private float angle;
-    private boolean astral;
     private Vector2 astralPos;
+    public static boolean astral;
     public static boolean rubber;
     public static boolean soup;
 
@@ -54,7 +54,7 @@ public class Player extends Sprite {
         breakSound = Gdx.audio.newSound(Gdx.files.internal("sounds/wood-bump.mp3"));
 
         // Sets cannonball array
-        cannonBalls = new Array<CannonFire>();
+        setCannonBalls(new Array<CannonFire>());
     }
 
     /**
@@ -70,10 +70,10 @@ public class Player extends Sprite {
         setRotation((float) (b2body.getAngle() * 180 / Math.PI));
 
         // Updates cannonball data
-        for(CannonFire ball : cannonBalls) {
+        for(CannonFire ball : getCannonBalls()) {
             ball.update(dt);
             if(ball.isDestroyed())
-                cannonBalls.removeValue(ball, true);
+                getCannonBalls().removeValue(ball, true);
         }
         
         System.out.println(b2body.getPosition());
@@ -119,8 +119,8 @@ public class Player extends Sprite {
      */
     public void fire() {
         // Fires cannons
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
+        getCannonBalls().add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
+        getCannonBalls().add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
 
         // Cone fire below
         /*cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
@@ -362,7 +362,15 @@ public class Player extends Sprite {
     public void draw(Batch batch){
         // Draws player and cannonballs
         super.draw(batch);
-        for(CannonFire ball : cannonBalls)
+        for(CannonFire ball : getCannonBalls())
             ball.draw(batch);
     }
+
+	public Array<CannonFire> getCannonBalls() {
+		return cannonBalls;
+	}
+
+	public void setCannonBalls(Array<CannonFire> cannonBalls) {
+		this.cannonBalls = cannonBalls;
+	}
 }
