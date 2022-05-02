@@ -66,8 +66,10 @@ public class PirateGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		//Set starting screen
-		MainMenu mainMenu = new MainMenu(this);
-		setScreen(mainMenu);
+		menuScreen = new MainMenu(this);
+		setScreen(menuScreen);
+		gameScreen = new GameScreen(this, false); //Team 17 - to make player class for skillTree
+		skillTreeScreen = new SkillTree(this, gameScreen.player); //Team 17 - to make static variables before called
 		//Create options
 		options = new audioControls();
 
