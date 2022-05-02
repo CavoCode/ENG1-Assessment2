@@ -483,7 +483,6 @@ public class GameScreen implements Screen {
         for(int i=0;i<fires.size();i++) {
         	fires.get(i).draw(game.batch);
         }
-        hud.weatherTimerBar.render(game.batch);
       //----------------------
         //Renders colleges
         player.draw(game.batch);
