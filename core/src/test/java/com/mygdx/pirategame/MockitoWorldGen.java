@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
@@ -42,6 +43,22 @@ public class MockitoWorldGen {
         Hud.setHealth(100);
     }
 
+    
+    /**
+     * Used to mock the base game class
+     * @return The created game
+     */
+    public static PirateGame mockGame() {
+		PirateGame pirateGame = Mockito.mock(PirateGame.class);
+
+		audioControls AudioControls = new audioControls();
+
+		Whitebox.setInternalState(pirateGame, "options", AudioControls);
+		Mockito.when(pirateGame.getPreferences()).thenReturn(AudioControls);
+
+		return pirateGame;
+	}
+    
     /**
      * Used to mock the game screen so it can be used in tests
      * @return The created game screen
@@ -60,8 +77,9 @@ public class MockitoWorldGen {
         
         //Mockito.when(GameScreen.game.getPreferences().isEffectsEnabled()).thenReturn(false);
 
-        //TmxMapLoader mapLoader = new TmxMapLoader();
-        //Mockito.when(screen.getMap()).thenReturn(mapLoader.load("map/map.tmx"));
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        TiledMap map = mapLoader.load("map/map.tmx");
+        Mockito.when(screen.getMap()).thenReturn(map);
 
         // Mock camera with the same config as the actual game camera
         OrthographicCamera camera = new OrthographicCamera();
