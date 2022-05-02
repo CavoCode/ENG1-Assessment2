@@ -42,6 +42,6 @@ public class MovementTest {
 		mockedGameScreen = MockitoWorldGen.mockGameScreenWithPlayer();
 		//GameScreen gameScreen = (GameScreen) MockitoWorldGen.createGameAndScreen().getScreen();
 		Player player = new Player(mockedGameScreen);
-		Hud hud = new Hud();
+		//Hud hud = new Hud();
 	}
 }
