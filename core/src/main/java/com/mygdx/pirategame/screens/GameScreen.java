@@ -601,8 +601,8 @@ public class GameScreen implements Screen {
      *
      * @param percentage percentage increase
      */
-    public static void changeAcceleration(float percentage){
-        Player.setAcceleration(percentage);
+    public static void changeAcceleration(Integer percentage){
+        Player.accelPercentInc(percentage);
     }
 
     /**

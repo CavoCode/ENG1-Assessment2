@@ -241,7 +241,7 @@ public class SkillTree implements Screen {
         //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
         if(states.get(0) == 1 && points >= 100){
             //Change acceleration
-            GameScreen.changeAcceleration(20F);
+            GameScreen.changeAcceleration(20);
             //Change Max speed
             GameScreen.changeMaxSpeed(20F);
             states.set(0, 0);
@@ -254,7 +254,7 @@ public class SkillTree implements Screen {
         }
         else if(states.get(2) == 1 && points >= 300){
             //Change acceleration
-            GameScreen.changeAcceleration(20F);
+            GameScreen.changeAcceleration(20);
             //Change Max speed
             GameScreen.changeMaxSpeed(20F);
             states.set(2, 0);

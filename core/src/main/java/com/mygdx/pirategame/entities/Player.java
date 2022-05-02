@@ -28,7 +28,7 @@ public class Player extends Sprite {
     private static float dragFactor = 1.0f;
     private static float maxSpeed = 5.0f + dragFactor;
     private static float accel = 0.08f;
-    private float accelMul = 1f; //Team 17 - percentage multiplier for acceleration
+    private static float accelMul = 1f; //Team 17 - percentage multiplier for acceleration
     private float angle;
     private Vector2 astralPos;
     public static boolean astral;
@@ -357,28 +357,46 @@ public class Player extends Sprite {
     	}
     }
     
+    /**
+     * Sets the speed to normal
+     */
     public void speedNormal(){
     	dragFactor = 1.0f;
     	maxSpeed = 5.0f + dragFactor;
     	accel = 0.08f;
     }
 
+    /**
+     * Slows down the ship (bad weather only)
+     */
     public void weatherDebuff(){
         dragFactor = 1.0f;
     	maxSpeed = 4.0f + dragFactor;
     	accel = 0.05f;
     }
 
-    public void accelPercentInc(Integer percent){
+    /**
+     * increases the multiplier with simple interest
+     * @param percent the Acceleration percentage increase
+     */
+    public static void accelPercentInc(Integer percent){
         accelMul = accelMul + percent/100;
 
     }
     
+    /**
+     * Returns the acceleration
+     * @return returns the acceleration as a float
+     */
     public static float getAcceleration() {
     	float temp = accel;
     	return temp;
     }
     
+    /**
+     * Changes the max speed by a percentage increase
+     * @param percentage
+     */
     public static void setMaxSpeed(float percentage) {
     	maxSpeed = maxSpeed * (1 +(percentage/100));
     }
