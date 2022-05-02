@@ -62,11 +62,15 @@ public class WorldContactListener implements ContactListener {
                 }
                 break;
             case PirateGame.ENEMY_BIT | PirateGame.PLAYER_BIT:
+                //Team 17 - allows player boat to be damaged in this instance of contact
+                Hud.changeHealth(-5);
                 if(fixA.getFilterData().categoryBits == PirateGame.ENEMY_BIT) {
                     ((Enemy) fixA.getUserData()).onContact();
+                    
                 }
                 else {
                     ((Enemy) fixB.getUserData()).onContact();
+                    
                 }
                 break;
             case PirateGame.FIRE_BIT | PirateGame.ENEMY_BIT:

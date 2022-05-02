@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.pirategame.entities.Player;
+import com.mygdx.pirategame.entities.WeatherTimer;
 import com.mygdx.pirategame.screens.SkillTree;
 import com.mygdx.pirategame.screens.GameScreen;
 
@@ -35,6 +36,7 @@ public class Hud implements Disposable {
     public static Integer weatherTimer; //Team 17 - Change back to private once done testing
     private static boolean countDown; //Team 17
     private static Integer pointMulti; //Team 17
+    public WeatherTimer weatherTimerBar; //Team 17 - used by game screen to render
 
     private static Label scoreLabel;
     private static Label healthLabel;
@@ -121,6 +123,9 @@ public class Hud implements Disposable {
         countDown = false;
         weatherTimer = 0;
         pointMulti = 1;
+
+        //WeatherTimer
+        weatherTimerBar = new WeatherTimer(weather);
         //------------
         stage.addActor(table4);
         stage.addActor(table3);
@@ -159,10 +164,12 @@ public class Hud implements Disposable {
             if (!countDown){
                 //Counts up
                 weatherTimer += 1;
+                weatherTimerBar.changeTime(1);
             }
             else{
                 //Counts down
                 weatherTimer -= 2;
+                weatherTimerBar.changeTime(-2);
             }
 
             //Checks to see if the weather counter has passed either boundary

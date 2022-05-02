@@ -483,6 +483,7 @@ public class GameScreen implements Screen {
         for(int i=0;i<fires.size();i++) {
         	fires.get(i).draw(game.batch);
         }
+        hud.weatherTimerBar.render(game.batch);
       //----------------------
         //Renders colleges
         player.draw(game.batch);
@@ -753,7 +754,7 @@ public class GameScreen implements Screen {
             }
 
             //Player De-buffs (speed and accel)
-            player.setAcceleration(0.05f);
+            player.weatherDebuff();
             
             //Slows enemy ship speed
             for (int i = 0; i < ships.size(); i++){
@@ -769,8 +770,8 @@ public class GameScreen implements Screen {
                 Powerups.get(i).setVisible(false);
             }
 
-            //Player Re-buffs (speed and accel)
-            player.setAcceleration(0.08f);
+            //Player has normal speed
+            player.speedNormal();
             //Changes enemy ship speed back to normal
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);
