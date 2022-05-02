@@ -67,6 +67,8 @@ public class GameScreen implements Screen {
 
     private World world;
     private Box2DDebugRenderer b2dr;
+    
+    private boolean headless;
 
     private static Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
@@ -102,6 +104,7 @@ public class GameScreen implements Screen {
     public GameScreen(PirateGame game, boolean headless){
         gameStatus = GAME_RUNNING;
         this.game = game;
+        this.headless = headless;
         // Initialising camera and extendable viewport for viewing game
         camera = new OrthographicCamera();
         camera.zoom = 0.0155f;
@@ -448,14 +451,16 @@ public class GameScreen implements Screen {
         }
         stateTime = 0;
     }
-
-        hud.update(dt);
-
-        // Centre camera on player boat
-        camera.position.x = player.b2body.getPosition().x;
-        camera.position.y = player.b2body.getPosition().y;
-        camera.update();
-        renderer.setView(camera);
+        
+        if (!headless) {
+        	hud.update(dt);
+        	
+        	// Centre camera on player boat
+            camera.position.x = player.b2body.getPosition().x;
+            camera.position.y = player.b2body.getPosition().y;
+            camera.update();
+            renderer.setView(camera);
+        }
     }
 
     /**

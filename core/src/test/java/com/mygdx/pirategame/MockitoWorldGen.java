@@ -34,6 +34,7 @@ public class MockitoWorldGen {
 
         Whitebox.setInternalState(hud, "scoreLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
         Whitebox.setInternalState(hud, "coinLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.YELLOW)));
+        Whitebox.setInternalState(hud, "powerupTypeText", new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
         Whitebox.setInternalState(hud, "coinMulti", 1);
         Whitebox.setInternalState(hud, "pointMulti", 1);
         

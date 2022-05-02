@@ -21,6 +21,7 @@ import org.mockito.Mockito;
 public class PowerupTest {
 
 	private static GameScreen mockScreen;
+	private static PirateGame mockedGame;
 
     /**
      * Setup the test environment
@@ -31,6 +32,7 @@ public class PowerupTest {
         Gdx.gl20 = Mockito.mock(GL20.class);
         Gdx.gl = Gdx.gl20;
         mockScreen = MockitoWorldGen.mockGameScreenWithPlayer();
+        mockedGame = MockitoWorldGen.mockGame();
         MockitoWorldGen.mockHudStatic();
     }
     
@@ -95,35 +97,37 @@ public class PowerupTest {
     }
     
     @Test()
-    public void runPowerups() {
+    public void keepPowerups() {
     	boolean test = true;
-    	GameScreen screen = mockScreen;
-    	Player player = new Player(screen);
-    	player.turnOnSoup();
+    	GameScreen screen = new GameScreen(mockedGame, true);
+    	GameScreen.setPowerupType("Soup");
+    	screen.update(0.3f);
     	if (!Player.soup) {
     		test = false;
     	}
-    	player.turnOffSoup();
+    	GameScreen.setPowerupType("Auto Reload");
+    	screen.update(0.3f);
     	if (Player.soup) {
     		test = false;
     	}
-    	player.turnOnRubber();
-    	if (!Player.rubber) {
-    		test = false;
-    	}
-    	player.turnOffRubber();
-    	if (Player.rubber) {
-    		test = false;
-    	}
-    	player.turnOnAstral();
+    	GameScreen.setPowerupType("Astral Body");
+    	screen.update(0.3f);
     	if (!Player.astral) {
     		test = false;
     	}
-    	player.turnOffAstral();
+    	GameScreen.setPowerupType("Oil Spill");
+    	screen.update(0.3f);
     	if (Player.astral) {
     		test = false;
     	}
-    	assertTrue(test);
+    	GameScreen.setPowerupType("Rubber Coating");
+    	screen.update(0.3f);
+    	if (!Player.astral) {
+    		test = false;
+    	}
+    	if (!Player.rubber) {
+    		test = false;
+    	}
     }
     
     

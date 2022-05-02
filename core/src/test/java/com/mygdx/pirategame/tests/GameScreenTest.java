@@ -18,18 +18,6 @@ import org.junit.runner.RunWith;
 @RunWith(GdxTestRunner.class)
 public class GameScreenTest {
 
-	/*
-	@Test
-	public void test() {
-		idk how this works or how to test is will find out at some point
-		PirateGame game = new PirateGame();
-		GameScreen screen = new GameScreen(game);
-		Player player = new Player(screen);
-		//assertEquals(player.dragFactor, 1.0f);
-		 
-		assertEquals(1, 1);
-	}
-	*/
 	private static GameScreen mockedGameScreen;
 	private static PirateGame mockedGame;
 	
