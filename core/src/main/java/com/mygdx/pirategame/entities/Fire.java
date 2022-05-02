@@ -28,7 +28,7 @@ public class Fire extends Entity {
     private boolean destroyed;
     //private Sound firePickup;
 
-    private long timeCreated = TimeUtils.millis();
+    public long timeCreated = TimeUtils.millis();
     
  	private Animation<TextureRegion> fireAnimation; // Must declare frame type (TextureRegion)
 
@@ -129,5 +129,9 @@ public class Fire extends Entity {
             super.draw(batch);
         }
     }
+
+	public boolean isDestroyed() {
+		return destroyed;
+	}
 }
 //----------------------

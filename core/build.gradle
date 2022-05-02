@@ -4,10 +4,6 @@ dependencies {
     implementation 'junit:junit:4.11'
     implementation 'org.mockito:mockito-all:1.10.7'
     
-    compile "junit:junit:4.+"
-    compile "org.mockito:mockito-all:1.9.+"
-    testCompile 'junit:junit:4.+'
-    testCompile "org.mockito:mockito-all:1.9.+"
 }
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 

@@ -99,7 +99,7 @@ public class GameScreen implements Screen {
      * generates the world data and data for entities that exist upon it,
      * @param game passes game data to current class,
      */
-    public GameScreen(PirateGame game){
+    public GameScreen(PirateGame game, boolean headless){
         gameStatus = GAME_RUNNING;
         this.game = game;
         // Initialising camera and extendable viewport for viewing game
@@ -110,19 +110,27 @@ public class GameScreen implements Screen {
         
         // Initialize difficulty
         difficulty = MainMenu.getDifficulty();
-
-        // Initialize a hud
-        hud = new Hud(game.batch);
-
-        // Initialising box2d physics
-        world = new World(new Vector2(0,0), true);
-        b2dr = new Box2DDebugRenderer();
-        player = new Player(this);
-
+        
         // making the Tiled tmx file render as a map
         maploader = new TmxMapLoader();
         map = maploader.load("map/map.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
+        
+        if (!headless) {
+        	// Initialize a hud
+            hud = new Hud(game.batch);
+            b2dr = new Box2DDebugRenderer();
+         
+            renderer = new OrthogonalTiledMapRenderer(map, 1 / PirateGame.PPM);
+        }
+        
+
+        // Initialising box2d physics
+        world = new World(new Vector2(0,0), true);
+        
+        player = new Player(this);
+
+        
+        
         new WorldCreator(this);
 
         // Setting up contact listener for collisions
@@ -210,9 +218,14 @@ public class GameScreen implements Screen {
             }
         }
         //----------------------
-
-        //Setting stage
-        stage = new Stage(new ScreenViewport());
+        
+        if (!headless) {
+        	//Setting stage
+            stage = new Stage(new ScreenViewport());
+        }
+        else {
+        	stage = null;
+        }
     }
 
     /**
@@ -576,7 +589,7 @@ public class GameScreen implements Screen {
      * @return position vector : returns the position of the player
      */
     public Vector2 getPlayerPos(){
-        return new Vector2(player.b2body. getPosition().x,player.b2body.getPosition().y);
+        return new Vector2(player.b2body.getPosition().x, player.b2body.getPosition().y);
     }
 
     /**
@@ -622,24 +635,31 @@ public class GameScreen implements Screen {
     	powerupType = type;
     }
     
+    public static String getPowerupType() {
+    	return(powerupType);
+    }
+    
     /**
      * Controls what powerups are active/unactive
      * should be called every update
      */
-    private void keepPowerupEffects() {
+    public void keepPowerupEffects() {
     	switch(powerupType) {
     	case "Auto Reload":
+    		Hud.setPowerupType("Auto Reload");
     		player.turnOffAstral();
     		player.turnOffRubber();
     		player.turnOffSoup();
     		player.fire();
     		break;
     	case "Astral Body":
+    		Hud.setPowerupType("Astral Body");
     		player.turnOffRubber();
     		player.turnOffSoup();
     		player.turnOnAstral();
     		break;
     	case "Oil Spill":
+    		Hud.setPowerupType("Oil Spill");
     		player.turnOffAstral();
     		player.turnOffRubber();
     		player.turnOffSoup();
@@ -651,21 +671,25 @@ public class GameScreen implements Screen {
     		}
     		break;
     	case "Rubber Coating":
+    		Hud.setPowerupType("Rubber Coating");
     		player.turnOffAstral();
     		player.turnOffSoup();
     		player.turnOnRubber();
     		break;
     	case "Soup":
+    		Hud.setPowerupType("Soup");
     		player.turnOffAstral();
     		player.turnOffRubber();
     		player.turnOnSoup();
     		break;
     	case "":
+    		Hud.setPowerupType("");
     		player.turnOffAstral();
     		player.turnOffRubber();
     		player.turnOffSoup();
     	}
     }
+    
     //----------------------
 
     /**

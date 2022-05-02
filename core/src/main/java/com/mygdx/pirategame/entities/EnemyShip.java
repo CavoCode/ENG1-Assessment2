@@ -80,7 +80,7 @@ public class EnemyShip extends Enemy {
         //If ship is set to destroy and isnt, destroy it
         if(setToDestroy && !destroyed) {
             //Play death noise
-            if (screen.game.getPreferences().isEffectsEnabled()) {
+            if (screen.game != null && screen.game.getPreferences().isEffectsEnabled()) {
                 destroy.play(screen.game.getPreferences().getEffectsVolume());
             }
             world.destroyBody(b2body);
@@ -166,7 +166,7 @@ public class EnemyShip extends Enemy {
     public void onContact() {
         Gdx.app.log("enemy", "collision");
         //Play collision sound
-        if (screen.game.getPreferences().isEffectsEnabled()) {
+        if (screen.game != null && screen.game.getPreferences().isEffectsEnabled()) {
             hit.play(screen.game.getPreferences().getEffectsVolume());
         }
         //Deal with the damage

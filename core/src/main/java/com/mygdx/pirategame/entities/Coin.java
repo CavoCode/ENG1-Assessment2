@@ -111,7 +111,7 @@ public class Coin extends Entity {
             setToDestroyed = true;
             Gdx.app.log("coin", "collision");
             //Play pickup sound
-            if (screen.game.getPreferences().isEffectsEnabled()) {
+            if (screen.game != null && screen.game.getPreferences().isEffectsEnabled()) {
                 coinPickup.play(screen.game.getPreferences().getEffectsVolume());
             }
         }
@@ -148,4 +148,8 @@ public class Coin extends Entity {
             }
         }
     }
+
+	public boolean isDestroyed() {
+		return (destroyed);
+	}
 }

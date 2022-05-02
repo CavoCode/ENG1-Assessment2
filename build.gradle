@@ -54,7 +54,10 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java-library"
-
+	test {
+        maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+        forkEvery = 1
+    }
 
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -66,7 +69,16 @@ project(":core") {
     		}
             maxHeapSize = '1G'
         }
+        
+        testImplementation 'junit:junit:4.+'
+        testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:natives"
+        testImplementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
+		/*
         compile "junit:junit:4.+"
         compile "org.mockito:mockito-all:1.9.+"
 
@@ -78,15 +90,19 @@ project(":core") {
 
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
-        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"*/
     }
 }
 
 project(":test") {
     apply plugin: "java-library"
 
-    sourceSets.test.java.srcDirs = ["src/"]
+   	sourceSets.test.java.srcDirs = ["src/"]
 
+	test {
+        maxParallelForks = Runtime.runtime.availableProcessors().intdiv(2) ?: 1
+        forkEvery = 1
+    }
 
     dependencies {
         compile project(":desktop")
@@ -94,13 +110,22 @@ project(":test") {
 
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-
+        
+		/*
         testCompile 'junit:junit:4.+'
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         testCompile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        testCompile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"*/
+        
+        testImplementation 'junit:junit:4.+'
+        testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion:natives"
+        testImplementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
 
         testImplementation "org.mockito:mockito-core:3.+"
     }

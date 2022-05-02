@@ -266,6 +266,14 @@ public class Hud implements Disposable {
     public static Integer getHealth(){
         return health;
     }
+    
+    public static void setHealth(Integer hp) {
+    	health = hp; 
+    }
+    
+    public static void setCoins(Integer Coins) {
+    	coins = Coins; 
+    }
 
     /**
      * (Not Used)
