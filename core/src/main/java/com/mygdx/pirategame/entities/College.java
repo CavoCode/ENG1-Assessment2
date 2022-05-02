@@ -195,5 +195,13 @@ public class College extends Enemy {
     public void fire() {
         cannonBalls.add(new CollegeFire(screen, b2body.getPosition().x, b2body.getPosition().y));
     }
+
+	public Array<CollegeFire> getCannonBalls() {
+		return cannonBalls;
+	}
+	
+	public boolean isDestroyed() {
+		return destroyed;
+	}
 }
 

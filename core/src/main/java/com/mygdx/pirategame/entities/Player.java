@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.entities.CannonFire;
+import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 
@@ -24,12 +25,13 @@ public class Player extends Sprite {
     public Body b2body;
     private Sound breakSound;
     private Array<CannonFire> cannonBalls;
-    public static float dragFactor = 1.0f;
+    private static float dragFactor = 1.0f;
     private static float maxSpeed = 5.0f + dragFactor;
     private static float accel = 0.08f;
+    private float accelMul = 1f; //Team 17 - percentage multiplier for acceleration
     private float angle;
-    private boolean astral;
     private Vector2 astralPos;
+    public static boolean astral;
     public static boolean rubber;
     public static boolean soup;
 
@@ -54,7 +56,7 @@ public class Player extends Sprite {
         breakSound = Gdx.audio.newSound(Gdx.files.internal("sounds/wood-bump.mp3"));
 
         // Sets cannonball array
-        cannonBalls = new Array<CannonFire>();
+        setCannonBalls(new Array<CannonFire>());
     }
 
     /**
@@ -70,10 +72,10 @@ public class Player extends Sprite {
         setRotation((float) (b2body.getAngle() * 180 / Math.PI));
 
         // Updates cannonball data
-        for(CannonFire ball : cannonBalls) {
+        for(CannonFire ball : getCannonBalls()) {
             ball.update(dt);
             if(ball.isDestroyed())
-                cannonBalls.removeValue(ball, true);
+                getCannonBalls().removeValue(ball, true);
         }
     }
 
@@ -117,8 +119,8 @@ public class Player extends Sprite {
      */
     public void fire() {
         // Fires cannons
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
-        cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
+        getCannonBalls().add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, 5));
+        getCannonBalls().add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, b2body, -5));
 
         // Cone fire below
         /*cannonBalls.add(new CannonFire(screen, b2body.getPosition().x, b2body.getPosition().y, (float) (b2body.getAngle() - Math.PI / 6), -5, b2body.getLinearVelocity()));
@@ -143,8 +145,8 @@ public class Player extends Sprite {
     	float liny = b2body.getLinearVelocity().y;
     	
     	//finds pre-drag velocity for x and y components
-    	linx += (x * accel);
-    	liny += (y * accel);
+    	linx += (x * accel*accelMul);
+    	liny += (y * accel*accelMul);
     	
     	//applies drag velocity penalty
     	linx = calcDrag(linx);
@@ -287,6 +289,7 @@ public class Player extends Sprite {
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
 
+            //Speed buff
             dragFactor = 2.0f;
     	    maxSpeed = 10.0f + dragFactor;
     	    accel = 0.2f;
@@ -326,9 +329,8 @@ public class Player extends Sprite {
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
 
-            dragFactor = 1.0f;
-    	    maxSpeed = 5.0f + dragFactor;
-    	    accel = 0.08f;
+            //Put the speed back to normal
+            speedNormal();
     	}
     }
 
@@ -340,26 +342,48 @@ public class Player extends Sprite {
     	if (!soup) {
     		soup = true;
     		dragFactor = 2.0f;
-    	    maxSpeed = 5.0f + dragFactor;
-    	    accel = 0.15f;
+    	    maxSpeed = 7.0f + dragFactor;
+    	    accel = 0.12f;
     	}
     }
     
     /**
-     * toggles of the soup powerup
+     * toggles off the soup powerup
      */
     public void turnOffSoup() {
     	if (soup) {
     		soup = false;
-    	    dragFactor = 1.0f;
-    	    maxSpeed = 5.0f + dragFactor;
-    	    accel = 0.08f;
+    	    speedNormal();
     	}
     }
     
-    public static void setAcceleration(float acceleration) {
-    	accel += (accel * (acceleration / 100));
+    public void speedNormal(){
+    	dragFactor = 1.0f;
+    	maxSpeed = 5.0f + dragFactor;
+    	accel = 0.08f;
     }
+
+    public void weatherDebuff(){
+        dragFactor = 1.0f;
+    	maxSpeed = 4.0f + dragFactor;
+    	accel = 0.05f;
+    }
+
+    public void accelPercentInc(Integer percent){
+        accelMul = accelMul + percent/100;
+
+    }
+    
+    public static float getAcceleration() {
+    	float temp = accel;
+    	return temp;
+    }
+    
+    public static void setMaxSpeed(float percentage) {
+    	maxSpeed = maxSpeed * (1 +(percentage/100));
+    }
+    
+    
     //----------------------
     
    
@@ -372,8 +396,16 @@ public class Player extends Sprite {
     public void draw(Batch batch){
         // Draws player and cannonballs
         super.draw(batch);
-        for(CannonFire ball : cannonBalls){
+        for(CannonFire ball : getCannonBalls()){
             ball.draw(batch);
         }
     }
+
+	public Array<CannonFire> getCannonBalls() {
+		return cannonBalls;
+	}
+
+	public void setCannonBalls(Array<CannonFire> cannonBalls) {
+		this.cannonBalls = cannonBalls;
+	}
 }
