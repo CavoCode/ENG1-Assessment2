@@ -327,4 +327,8 @@ public class EnemyShip extends Enemy {
 	public Array<CollegeFire> getCannonBalls() {
 		return cannonBalls;
 	}
+
+	public boolean isDestroyed() {
+		return destroyed;
+	}
 }

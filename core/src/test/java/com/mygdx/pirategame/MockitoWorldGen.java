@@ -4,14 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.hud.audioControls;
 import com.mygdx.pirategame.main.PirateGame;
@@ -20,7 +18,7 @@ import org.mockito.Mockito;
 import org.mockito.internal.util.reflection.Whitebox;
 
 /**
- * mock specific classes within the game
+ * mock base and main classes within the game
  */
 public class MockitoWorldGen {
 
@@ -29,7 +27,7 @@ public class MockitoWorldGen {
     /**
      * Used to mock the Hud class so all the static methods can be used
      */
-    public static void mockHudStatic() {
+    public static void mockHud() {
         Hud hud = Mockito.mock(Hud.class);
 
         Whitebox.setInternalState(hud, "scoreLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
@@ -62,7 +60,7 @@ public class MockitoWorldGen {
 	}
     
     /**
-     * Used to mock the game screen so it can be used in tests
+     * Used to mock the game screen
      * @return The created game screen
      */
     public static GameScreen mockGameScreen() {
@@ -80,6 +78,7 @@ public class MockitoWorldGen {
         //boolean b = options.isEffectsEnabled();
         
         //Mockito.when(GameScreen.game.getPreferences().isEffectsEnabled()).thenReturn(false);
+        Mockito.when(screen.checkGenPos(Mockito.anyInt(),Mockito.anyInt())).thenReturn(true);
 
         TmxMapLoader mapLoader = new TmxMapLoader();
         TiledMap map = mapLoader.load("map/map.tmx");
@@ -90,19 +89,6 @@ public class MockitoWorldGen {
         camera.zoom = 0.0155f;
         FitViewport viewport = new FitViewport(1280, 720, camera);
         camera.position.set(viewport.getWorldWidth() / 3, viewport.getWorldHeight() / 3, 0);
-
-        return screen;
-    }
-
-    /**
-     * Used to mock the game screen with the player position also mocked
-     * @return the created GameScreen instance
-     */
-    public static GameScreen mockGameScreenWithPlayer() {
-        GameScreen screen = mockGameScreen();
-
-        Mockito.when(screen.getPlayerPos()).thenReturn(new Vector2(13*64 / PirateGame.PPM, 11*64 / PirateGame.PPM));
-        Mockito.when(screen.checkGenPos(Mockito.anyInt(),Mockito.anyInt())).thenReturn(true);
 
         return screen;
     }

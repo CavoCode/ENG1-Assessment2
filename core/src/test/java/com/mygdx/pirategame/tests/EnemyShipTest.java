@@ -1,75 +1,47 @@
 package com.mygdx.pirategame.tests;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.mygdx.pirategame.main.PirateGame;
-import com.mygdx.pirategame.hud.Hud;
-import com.mygdx.pirategame.interactive.WorldContactListener;
-import com.mygdx.pirategame.interactive.WorldCreator;
 import com.mygdx.pirategame.entities.EnemyShip;
-import com.mygdx.pirategame.entities.AvailableSpawn;
-import com.mygdx.pirategame.entities.Coin;
-import com.mygdx.pirategame.entities.EnemyShip;
-import com.mygdx.pirategame.entities.CollegeFire;
 import com.mygdx.pirategame.entities.Player;
+import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
-import com.mygdx.pirategame.tests.GdxTestRunner;
 import com.mygdx.pirategame.MockitoWorldGen;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 @RunWith(GdxTestRunner.class)
 public class EnemyShipTest {
 
-	private static GameScreen mockedGameScreen;
+	private static GameScreen mockScreen;
+	private static PirateGame mockGame;
 
-    /**
-     * Setup the test environment
-     */
     @BeforeClass
     public static void init() {
-        // Use Mockito to mock the OpenGL methods since we are running headlessly
-        Gdx.gl20 = Mockito.mock(GL20.class);
-        Gdx.gl = Gdx.gl20;
-
-        // note all mocking cannot appear in a @Test annotated method
-        // or the mocking will not work, all mocking must occur in @BeforeClass
-        // at least from my testing it does not even work in a @Before method
-        MockitoWorldGen.mockHudStatic();
-
-        mockedGameScreen = MockitoWorldGen.mockGameScreenWithPlayer();
+        MockitoWorldGen.mockHud();
+        mockScreen = MockitoWorldGen.mockGameScreen();
+        mockGame = MockitoWorldGen.mockGame();
     }
     
-    /* might test these if have time
     @Test()
     public void enemyShipDestroyed() {
-    	GameScreen screen = mockedGameScreen;
-        EnemyShip enemyShip = new EnemyShip(screen);
-        enemyShip.applyImpuse(1, 0);
-        float oldx = enemyShip.b2body.getLinearVelocity().x;
-        for (int x = 0; x < 100; x++) {
-        	enemyShip.applyImpuse(0, 0);
-        }
-        float newx = enemyShip.b2body.getLinearVelocity().x;
-        assertTrue("Can enemyShip stop?",newx == 0);
-    }*/
+    	GameScreen screen = mockScreen;
+    	String difficulty = "easy";
+        EnemyShip enemyShip = new EnemyShip(screen, 10, 10,
+        		"ships&colleges/anne_lister_ship.png", "Anne Lister",  difficulty);
+        
+        enemyShip.health = 0;
+        enemyShip.update(0.1f);
+        enemyShip.update(0.1f);
+        assertTrue(enemyShip.isDestroyed());
+    }
     
     @Test()
     public void enemyShipFire() {
-    	GameScreen screen = mockedGameScreen;
+    	GameScreen screen = new GameScreen(mockGame, true);
     	String difficulty = "easy";
         EnemyShip enemyShip = new EnemyShip(screen, 10, 10,
         		"ships&colleges/anne_lister_ship.png", "Anne Lister",  difficulty);
@@ -82,8 +54,8 @@ public class EnemyShipTest {
     
     @Test()
     public void enemyShipFollow() {
-    	GameScreen screen = mockedGameScreen;
-    	Player player = new Player(screen);
+    	GameScreen screen = new GameScreen(mockGame, true);
+    	//Player player = new Player(screen);
     	String difficulty = "hard";
     	Vector2 playerPos = screen.getPlayerPos();
         EnemyShip enemyShip = new EnemyShip(screen, playerPos.x + 3, playerPos.y + 3,
@@ -96,7 +68,7 @@ public class EnemyShipTest {
     @Test()
     public void enemyShipMove() {
     	boolean test = true;
-    	GameScreen screen = mockedGameScreen;
+    	GameScreen screen = new GameScreen(mockGame, true);
     	String difficulty = "easy";
     	String ship = "ships&colleges/anne_lister_ship.png";
     	String college = "Unaligned";
@@ -115,12 +87,14 @@ public class EnemyShipTest {
     		
     		EnemyShip enemyShip = new EnemyShip(screen, 10, 10,
                     ship, college,  difficulty);
-            float oldvel = enemyShip.b2body.getLinearVelocity().x;
+            float oldvelx = enemyShip.b2body.getLinearVelocity().x;
+            float oldvely = enemyShip.b2body.getLinearVelocity().y;
             enemyShip.update(5f);
             enemyShip.update(5f);
             enemyShip.update(5f);
-            float newvel = enemyShip.b2body.getLinearVelocity().x;
-            if (oldvel == newvel) {
+            float newvelx = enemyShip.b2body.getLinearVelocity().x;
+            float newvely = enemyShip.b2body.getLinearVelocity().y;
+            if (oldvelx == newvelx && oldvely == newvely) {
             	test = false;
             }
     	}
@@ -129,7 +103,7 @@ public class EnemyShipTest {
     
     @Test()
     public void enemyShipHitByPlayer() {
-    	GameScreen screen = mockedGameScreen;
+    	GameScreen screen = mockScreen;
     	String difficulty = "easy";
     	String ship = "ships&colleges/anne_lister_ship.png";
     	String college = "Anne Lister";

@@ -96,14 +96,14 @@ public class Fire extends Entity {
         // setting BIT identifier
         fdef.filter.categoryBits = PirateGame.FIRE_BIT;
         // determining what this BIT can collide with
-        fdef.filter.maskBits = PirateGame.DEFAULT_BIT | PirateGame.ENEMY_BIT;
+        fdef.filter.maskBits = PirateGame.ENEMY_BIT;
         fdef.shape = shape;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
     }
 
     /**
-     * What happens when an entity collides with the fire. The only entity that is able to do so is the player ship
+     * What happens when an entity collides with the fire. The only entities that is able to do so are the enemy ships
      */
     @Override
     public void entityContact() {

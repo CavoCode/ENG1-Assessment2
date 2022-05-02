@@ -1,44 +1,31 @@
 package com.mygdx.pirategame.tests;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.entities.Powerup;
 import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
-import com.mygdx.pirategame.tests.GdxTestRunner;
 import com.mygdx.pirategame.MockitoWorldGen;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 @RunWith(GdxTestRunner.class)
 public class PowerupTest {
 
 	private static GameScreen mockScreen;
-	private static PirateGame mockedGame;
+	private static PirateGame mockGame;
 
-    /**
-     * Setup the test environment
-     */
+
     @BeforeClass
     public static void init() {
-        // Use Mockito to mock the OpenGL methods to 
-        Gdx.gl20 = Mockito.mock(GL20.class);
-        Gdx.gl = Gdx.gl20;
-        mockScreen = MockitoWorldGen.mockGameScreenWithPlayer();
-        mockedGame = MockitoWorldGen.mockGame();
-        MockitoWorldGen.mockHudStatic();
+        mockScreen = MockitoWorldGen.mockGameScreen();
+        mockGame = MockitoWorldGen.mockGame();
+        MockitoWorldGen.mockHud();
     }
     
-    /**
-     * Tests the creation of the object, using arbitrary coordinates
-     */
     @Test(expected = Test.None.class)
     public void testInstantiation() {
         new Powerup(mockScreen, 10, 10, false);
@@ -99,7 +86,7 @@ public class PowerupTest {
     @Test()
     public void keepPowerups() {
     	boolean test = true;
-    	GameScreen screen = new GameScreen(mockedGame, true);
+    	GameScreen screen = new GameScreen(mockGame, true);
     	Player player = new Player(screen);
     	GameScreen.setPowerupType("Soup");
     	screen.update(0.3f);

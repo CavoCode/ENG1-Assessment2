@@ -2,43 +2,35 @@ package com.mygdx.pirategame.tests;
 
 import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.hud.Hud;
-import com.mygdx.pirategame.interactive.WorldCreator;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.screens.GameScreen;
-import com.mygdx.pirategame.tests.GdxTestRunner;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.mygdx.pirategame.MockitoWorldGen;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 
 @RunWith(GdxTestRunner.class)
 public class GameScreenTest {
 
-	private static GameScreen mockedGameScreen;
-	private static PirateGame mockedGame;
+	private static PirateGame mockGame;
 	
 	@Before
 	public void init() {
-		mockedGame = MockitoWorldGen.mockGame();
-		mockedGameScreen = MockitoWorldGen.mockGameScreen();
-        MockitoWorldGen.mockHudStatic();
+		mockGame = MockitoWorldGen.mockGame();
+        MockitoWorldGen.mockHud();
 	}
 	
 	@Test
 	public void testConstruction() {
-		GameScreen screen = new GameScreen(mockedGame, true);
+		GameScreen screen = new GameScreen(mockGame, true);
 	}
 	
 	@Test
 	public void gameOverCheck() {
-		GameScreen screen = new GameScreen(mockedGame, true);
+		GameScreen screen = new GameScreen(mockGame, true);
 		Hud.changeHealth(-100);
 		screen.gameOverCheck();
 		assertTrue(screen.game.getScreen() == null);
@@ -47,7 +39,7 @@ public class GameScreenTest {
 	//Can't simulate weather functionality through hud so just calling method
 	@Test
 	public void weatherCheck() {
-		GameScreen screen = new GameScreen(mockedGame, true);
+		GameScreen screen = new GameScreen(mockGame, true);
 		//ensure it takes value rather than pointer
 		float oldAccel = 0;
 		oldAccel += Player.getAcceleration();
