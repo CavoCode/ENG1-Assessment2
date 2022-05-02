@@ -226,8 +226,11 @@ public class Hud implements Disposable {
         //Team 17- added pointMulti
         score += value * pointMulti;
         scoreLabel.setText(String.format("%03d", score));
-        //Check if a points boundary is met
-        SkillTree.pointsCheck(score);
+        
+        if (GameScreen.game != null) {
+        	//Check if a points boundary is met
+        	SkillTree.pointsCheck(score);
+        }
     }
 
     /**
@@ -274,12 +277,17 @@ public class Hud implements Disposable {
     public static void setCoins(Integer Coins) {
     	coins = Coins; 
     }
+    
+    public static void setPoints(int points) {
+		score = points;
+		
+	}
 
     /**
      * (Not Used)
      * Returns coins value
      *
-     * @return health : returns coins value
+     * @return coins : returns coins value
      */
     public static Integer getCoins(){
         return coins;
@@ -292,6 +300,8 @@ public class Hud implements Disposable {
     public void dispose() {
         stage.dispose();
     }
+
+	
 
 }
 

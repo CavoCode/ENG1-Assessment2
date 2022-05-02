@@ -86,7 +86,7 @@ public class PlayerTest {
         Player player = new Player(screen);
         player.fire();
         float oldx = player.getCannonBalls().first().getX();
-        player.getCannonBalls().first().update(0.5f);
+        player.update(0.5f);
         float newx = player.getCannonBalls().first().getX();
         assertTrue("Can player fire?",newx < oldx);
     }

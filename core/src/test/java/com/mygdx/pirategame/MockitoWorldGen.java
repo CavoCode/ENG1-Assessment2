@@ -34,9 +34,10 @@ public class MockitoWorldGen {
         Whitebox.setInternalState(hud, "scoreLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
         Whitebox.setInternalState(hud, "coinLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.YELLOW)));
         Whitebox.setInternalState(hud, "coinMulti", 1);
-
+        Whitebox.setInternalState(hud, "pointMulti", 1);
+        
         // setting up score and coins to 0
-        //Hud.setPoints(0);
+        Hud.setPoints(0);
         Hud.setCoins(0);
         Hud.setHealth(100);
     }
@@ -79,6 +80,7 @@ public class MockitoWorldGen {
         GameScreen screen = mockGameScreen();
 
         Mockito.when(screen.getPlayerPos()).thenReturn(new Vector2(13*64 / PirateGame.PPM, 11*64 / PirateGame.PPM));
+        Mockito.when(screen.checkGenPos(Mockito.anyInt(),Mockito.anyInt())).thenReturn(true);
 
         return screen;
     }

@@ -54,10 +54,7 @@ public class CollegeTest {
         mockedGameScreen = MockitoWorldGen.mockGameScreenWithPlayer();
     }
     
-    /**
-     * Tests the creation of the object, using arbitrary coordinates
-     */
-    /*
+    /* might test these if have time
     @Test()
     public void collegeDamage() {
     	GameScreen screen = mockedGameScreen;
@@ -88,11 +85,14 @@ public class CollegeTest {
     	Player player = new Player(screen);
     	AvailableSpawn invalidSpawn = new AvailableSpawn();
     	String difficulty = "easy";
+    	String flag = "ships&colleges/anne_lister_flag.png";
+    	String ship = "ships&colleges/anne_lister_ship.png";
         College college = new College(screen, "Anne Lister",10, 10,
-                "ships&colleges/anne_lister_flag.png", "ships&colleges/anne_lister_ship.png", 8, invalidSpawn, difficulty);
+               flag, ship, 8, invalidSpawn, difficulty);
+        
         college.fire();
         float oldx = college.getCannonBalls().first().getX();
-        college.getCannonBalls().first().update(0.5f);
+        college.update(0.5f);
         float newx = college.getCannonBalls().first().getX();
         assertTrue("Can college fire?",newx < oldx);
     }
