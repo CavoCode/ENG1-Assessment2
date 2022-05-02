@@ -369,7 +369,7 @@ public class Player extends Sprite {
     	accel = 0.05f;
     }
 
-    public void accelPercentInc(float percent){
+    public void accelPercentInc(Integer percent){
         accelMul = accelMul + percent/100;
     }
     //----------------------

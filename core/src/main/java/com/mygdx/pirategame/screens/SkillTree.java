@@ -21,6 +21,8 @@ import com.mygdx.pirategame.main.PirateGame;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.loading.PrivateClassLoader;
+
 /**
  * The type for the skill tree screen.
  * It is a visual representation for the skills that the game automatically unlocks for the player.
@@ -33,6 +35,7 @@ public class SkillTree implements Screen {
 
     private final PirateGame parent;
     private final Stage stage;
+    private Player player; //Team 17 - to avoid static callings
 
     //To store whether buttons are enabled or disabled
     private static final List<Integer> states = new ArrayList<Integer>();
@@ -57,9 +60,11 @@ public class SkillTree implements Screen {
      * Instantiates a new Skill tree.
      *
      * @param pirateGame the main starting body of the game. Where screen swapping is carried out.
+     * @param player Team 17 - to avoid static callings
      */
 //In the constructor, the parent and stage are set. Also the states list is set
-    public SkillTree(PirateGame pirateGame){
+    public SkillTree(PirateGame pirateGame, Player player){
+        this.player = player;//Team 17 - to avoid static callings
         parent = pirateGame;
         stage = new Stage(new ScreenViewport());
 
@@ -140,7 +145,7 @@ public class SkillTree implements Screen {
         Acceleration.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-            	Player.setAcceleration(20);
+            	player.accelPercentInc(20); //Team 17 - changed function slightly
             }
         });
         
