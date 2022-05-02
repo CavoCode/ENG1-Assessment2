@@ -152,7 +152,7 @@ public class SkillTree implements Screen {
         
         ExtraLives = new TextButton("Max Health + 20%", skin);
         if (states.get(2) == 1){
-        	Acceleration.setDisabled(true);
+        	ExtraLives.setDisabled(true);
         }
 
         ExtraLives.addListener(new ChangeListener() {
@@ -239,31 +239,19 @@ public class SkillTree implements Screen {
      * @param points the current amount of points
      */
     public static void pointsCheck(int points){
-        //States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
-        if(states.get(0) == 1 && points >= 100){
-            //Change acceleration
-            GameScreen.changeAcceleration(20);
-            //Change Max speed
-            GameScreen.changeMaxSpeed(20F);
+    	//States.get() checks whether it has already been unlocked. 1 = not unlocked, 0 = unlocked
+        if(states.get(0) == 1 && points >= 25 && Hud.getCoins() >= 5){
             states.set(0, 0);
-
         }
-        else if(states.get(1) == 1 && points >= 200){
-            //Change multiplier
-            Hud.changeCoinsMulti(2);
+        else if(states.get(1) == 1 && points >= 50 && Hud.getCoins() >= 10){
             states.set(1, 0);
         }
-        else if(states.get(2) == 1 && points >= 300){
-            //Change acceleration
-            GameScreen.changeAcceleration(20);
-            //Change Max speed
-            GameScreen.changeMaxSpeed(20F);
+        else if(states.get(2) == 1 && points >= 15 && Hud.getCoins() >= 15){
             states.set(2, 0);
-
-        }else if(states.get(3) == 1 && points >= 400){
-            //Increase damage
-            GameScreen.changeDamage(5);
+        }else if(states.get(3) == 1 && points >= 10 && Hud.getCoins() >= 20){
             states.set(3, 0);
+        }else if(states.get(4) == 1 && points >= 100 && Hud.getCoins() >= 25){
+            states.set(4, 0);
         }
     }
 

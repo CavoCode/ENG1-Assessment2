@@ -598,6 +598,7 @@ public class GameScreen implements Screen {
     }
 
     /**
+     * not used
      * Updates player acceleration by a given percentage. Accessed by skill tree
      *
      * @param percentage percentage increase

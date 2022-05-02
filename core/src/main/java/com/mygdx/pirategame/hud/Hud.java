@@ -201,7 +201,7 @@ public class Hud implements Disposable {
     }
     
     public static void changeMaxHealth(int value) {
-    	maxHealth = value;
+    	maxHealth += value;
         healthLabel.setText(String.format("%02d", maxHealth));
     }
 
@@ -214,6 +214,9 @@ public class Hud implements Disposable {
         if (value > 0) {
             coins += value * coinMulti;
             coinLabel.setText(String.format("%03d", coins));
+        }else if (value < 0) { //used if buying upgrade from shop so dont include coin multiplier
+        	coins += value;
+        	coinLabel.setText(String.format("%03d", coins));
         }
     }
 
@@ -284,7 +287,7 @@ public class Hud implements Disposable {
 	}
 
     /**
-     * (Not Used)
+     * Used in SkillTree.java
      * Returns coins value
      *
      * @return coins : returns coins value
