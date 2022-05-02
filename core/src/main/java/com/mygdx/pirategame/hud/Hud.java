@@ -227,7 +227,7 @@ public class Hud implements Disposable {
         score += value * pointMulti;
         scoreLabel.setText(String.format("%03d", score));
         
-        if (GameScreen.game != null) {
+        if (!GameScreen.headless) {
         	//Check if a points boundary is met
         	SkillTree.pointsCheck(score);
         }

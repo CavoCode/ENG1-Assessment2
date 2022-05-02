@@ -100,6 +100,7 @@ public class PowerupTest {
     public void keepPowerups() {
     	boolean test = true;
     	GameScreen screen = new GameScreen(mockedGame, true);
+    	Player player = new Player(screen);
     	GameScreen.setPowerupType("Soup");
     	screen.update(0.3f);
     	if (!Player.soup) {
@@ -122,12 +123,15 @@ public class PowerupTest {
     	}
     	GameScreen.setPowerupType("Rubber Coating");
     	screen.update(0.3f);
-    	if (!Player.astral) {
-    		test = false;
-    	}
     	if (!Player.rubber) {
     		test = false;
     	}
+    	GameScreen.setPowerupType("");
+    	screen.update(0.3f);
+    	if (Player.rubber) {
+    		test = false;
+    	}
+    	assertTrue(test);
     }
     
     

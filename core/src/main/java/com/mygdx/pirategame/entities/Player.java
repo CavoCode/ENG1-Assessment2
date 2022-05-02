@@ -24,7 +24,7 @@ public class Player extends Sprite {
     public Body b2body;
     private Sound breakSound;
     private Array<CannonFire> cannonBalls;
-    public static float dragFactor = 1.0f;
+    private static float dragFactor = 1.0f;
     private static float maxSpeed = 5.0f + dragFactor;
     private static float accel = 0.05f;
     private float angle;
@@ -350,8 +350,19 @@ public class Player extends Sprite {
     }
     
     public static void setAcceleration(float acceleration) {
-    	accel += (accel * (acceleration / 100));
+    	accel += (accel * acceleration);
     }
+    
+    public static float getAcceleration() {
+    	float temp = accel;
+    	return temp;
+    }
+    
+    public static void setMaxSpeed(float percentage) {
+    	maxSpeed = maxSpeed * (1 +(percentage/100));
+    }
+    
+    
     //----------------------
     
    

@@ -68,7 +68,7 @@ public class GameScreen implements Screen {
     private World world;
     private Box2DDebugRenderer b2dr;
     
-    private boolean headless;
+    public static boolean headless;
 
     private static Player player;
     private static HashMap<String, College> colleges = new HashMap<>();
@@ -598,21 +598,21 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Updates acceleration by a given percentage. Accessed by skill tree
+     * Updates player acceleration by a given percentage. Accessed by skill tree
      *
      * @param percentage percentage increase
      */
     public static void changeAcceleration(float percentage){
-        accel = accel * (1 + (percentage / 100));
+        Player.setAcceleration(percentage);
     }
 
     /**
-     * Updates max speed by a given percentage. Accessed by skill tree
+     * Updates player max speed by a given percentage. Accessed by skill tree
      *
      * @param percentage percentage increase
      */
     public static void changeMaxSpeed(float percentage){
-        maxSpeed = maxSpeed * (1 +(percentage/100));
+    	Player.setMaxSpeed(percentage);
     }
     
     //-------Team-17--------
@@ -782,7 +782,7 @@ public class GameScreen implements Screen {
             }
 
             //Player De-buffs (speed and accel)
-            player.setAcceleration(0.05f);
+            Player.setAcceleration(-0.2f);
             
             //Slows enemy ship speed
             for (int i = 0; i < ships.size(); i++){
@@ -799,7 +799,7 @@ public class GameScreen implements Screen {
             }
 
             //Player Re-buffs (speed and accel)
-            player.setAcceleration(0.08f);
+            Player.setAcceleration(0.25f);
             //Changes enemy ship speed back to normal
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);

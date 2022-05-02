@@ -35,6 +35,7 @@ public class MockitoWorldGen {
         Whitebox.setInternalState(hud, "scoreLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
         Whitebox.setInternalState(hud, "coinLabel", new Label(String.format("%03d", 0), new Label.LabelStyle(new BitmapFont(), Color.YELLOW)));
         Whitebox.setInternalState(hud, "powerupTypeText", new Label("", new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
+        Whitebox.setInternalState(hud, "healthLabel", new Label(String.format("%03d", 100), new Label.LabelStyle(new BitmapFont(), Color.RED)));
         Whitebox.setInternalState(hud, "coinMulti", 1);
         Whitebox.setInternalState(hud, "pointMulti", 1);
         
@@ -67,6 +68,8 @@ public class MockitoWorldGen {
     public static GameScreen mockGameScreen() {
         // creating required variables, and mocking return values
         GameScreen screen = Mockito.mock(GameScreen.class);
+        
+        Whitebox.setInternalState(screen, "headless", true);
         
         Mockito.when(screen.getWorld()).thenReturn(new World(new Vector2(0, 0), true));
         
