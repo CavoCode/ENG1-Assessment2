@@ -70,7 +70,7 @@ public class GameScreen implements Screen {
     
     public static boolean headless;
 
-    private static Player player;
+    public static Player player; //Team 17 - to call it in PirateGame
     private static HashMap<String, College> colleges = new HashMap<>();
     private static ArrayList<EnemyShip> ships = new ArrayList<>();
     private static ArrayList<Coin> Coins = new ArrayList<>();
@@ -310,14 +310,13 @@ public class GameScreen implements Screen {
                 resume();
             }
         });
-        options.addListener(new ChangeListener() {
+        options.addListener(new ChangeListener(){
             @Override
-            public void changed(ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor){
                 pauseTable.setVisible(false);
                 game.setScreen(new Options(game,game.getScreen()));
             }
-        }
-        );
+        });
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -782,7 +781,7 @@ public class GameScreen implements Screen {
             }
 
             //Player De-buffs (speed and accel)
-            Player.setAcceleration(-0.2f);
+            player.weatherDebuff();
             
             //Slows enemy ship speed
             for (int i = 0; i < ships.size(); i++){
@@ -798,8 +797,9 @@ public class GameScreen implements Screen {
                 Powerups.get(i).setVisible(false);
             }
 
-            //Player Re-buffs (speed and accel)
-            Player.setAcceleration(0.25f);
+            //Player has normal speed
+            player.speedNormal();
+
             //Changes enemy ship speed back to normal
             for (int i = 0; i < ships.size(); i++){
                 ships.get(i).changeSpeed(1F);

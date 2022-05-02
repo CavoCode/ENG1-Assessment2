@@ -11,6 +11,7 @@ import com.mygdx.pirategame.screens.MainMenu;
 import com.mygdx.pirategame.screens.SkillTree;
 import com.mygdx.pirategame.screens.VictoryScreen;
 import com.mygdx.pirategame.hud.audioControls;
+import com.badlogic.gdx.Screen;
 
 
 /**
@@ -93,13 +94,13 @@ public class PirateGame extends Game {
 				break;
 
 			case GAME:
-				if (gameScreen == null) gameScreen = new GameScreen(this, false);
-				if (skillTreeScreen == null) skillTreeScreen = new SkillTree(this);
+
+				if (skillTreeScreen == null) skillTreeScreen = new SkillTree(this, gameScreen.player);
 				this.setScreen(gameScreen);
 				break;
 
 			case SKILL:
-				if (skillTreeScreen == null) skillTreeScreen = new SkillTree(this);
+				if (skillTreeScreen == null) skillTreeScreen = new SkillTree(this, gameScreen.player);
 				this.setScreen(skillTreeScreen);
 				break;
 

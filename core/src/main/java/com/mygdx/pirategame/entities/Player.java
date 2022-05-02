@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.pirategame.entities.CannonFire;
+import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
 
@@ -26,7 +27,8 @@ public class Player extends Sprite {
     private Array<CannonFire> cannonBalls;
     private static float dragFactor = 1.0f;
     private static float maxSpeed = 5.0f + dragFactor;
-    private static float accel = 0.05f;
+    private static float accel = 0.08f;
+    private float accelMul = 1f; //Team 17 - percentage multiplier for acceleration
     private float angle;
     private Vector2 astralPos;
     public static boolean astral;
@@ -143,8 +145,8 @@ public class Player extends Sprite {
     	float liny = b2body.getLinearVelocity().y;
     	
     	//finds pre-drag velocity for x and y components
-    	linx += (x * accel);
-    	liny += (y * accel);
+    	linx += (x * accel*accelMul);
+    	liny += (y * accel*accelMul);
     	
     	//applies drag velocity penalty
     	linx = calcDrag(linx);
@@ -286,6 +288,11 @@ public class Player extends Sprite {
             fdef.shape = shape;
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
+
+            //Speed buff
+            dragFactor = 2.0f;
+    	    maxSpeed = 10.0f + dragFactor;
+    	    accel = 0.2f;
     	}
     }
     
@@ -321,6 +328,9 @@ public class Player extends Sprite {
             fdef.shape = shape;
             b2body.createFixture(fdef).setUserData(this);
             b2body.setLinearVelocity(vel);
+
+            //Put the speed back to normal
+            speedNormal();
     	}
     }
 
@@ -332,25 +342,36 @@ public class Player extends Sprite {
     	if (!soup) {
     		soup = true;
     		dragFactor = 2.0f;
-    	    maxSpeed = 10.0f + dragFactor;
-    	    accel = 0.15f;
+    	    maxSpeed = 7.0f + dragFactor;
+    	    accel = 0.12f;
     	}
     }
     
     /**
-     * toggles of the soup powerup
+     * toggles off the soup powerup
      */
     public void turnOffSoup() {
     	if (soup) {
     		soup = false;
-    	    dragFactor = 1.0f;
-    	    maxSpeed = 5.0f + dragFactor;
-    	    accel = 0.05f;
+    	    speedNormal();
     	}
     }
     
-    public static void setAcceleration(float acceleration) {
-    	accel += (accel * acceleration);
+    public void speedNormal(){
+    	dragFactor = 1.0f;
+    	maxSpeed = 5.0f + dragFactor;
+    	accel = 0.08f;
+    }
+
+    public void weatherDebuff(){
+        dragFactor = 1.0f;
+    	maxSpeed = 4.0f + dragFactor;
+    	accel = 0.05f;
+    }
+
+    public void accelPercentInc(Integer percent){
+        accelMul = accelMul + percent/100;
+
     }
     
     public static float getAcceleration() {
