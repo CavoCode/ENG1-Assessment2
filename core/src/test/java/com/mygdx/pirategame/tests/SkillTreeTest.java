@@ -31,8 +31,8 @@ public class SkillTreeTest {
         // Use Mockito to mock the OpenGL methods to 
         Gdx.gl20 = Mockito.mock(GL20.class);
         Gdx.gl = Gdx.gl20;
-        mockScreen = MockitoWorldGen.mockGameScreenWithPlayer();
+        mockScreen = MockitoWorldGen.mockGameScreen();
         mockedGame = MockitoWorldGen.mockGame();
-        MockitoWorldGen.mockHudStatic();
+        MockitoWorldGen.mockHud();
     }
 }

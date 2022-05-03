@@ -64,7 +64,7 @@ public class PlayerTest {
     
     
     @Test()
-    public void playerHitByCollege() {
+    public void playerHitByCollegeFire() {
     	GameScreen screen = new GameScreen(mockGame, true);
     	CollegeFire collegeFire = new CollegeFire(screen, screen.getPlayerPos().x, screen.getPlayerPos().y);
     	screen.update(0.1f);
