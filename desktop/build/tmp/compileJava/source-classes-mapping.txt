@@ -1,0 +1,2 @@
+com/mygdx/pirategame/desktop/DesktopLauncher.java
+ com.mygdx.pirategame.desktop.DesktopLauncher
