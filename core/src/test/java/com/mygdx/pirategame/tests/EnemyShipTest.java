@@ -1,6 +1,8 @@
 package com.mygdx.pirategame.tests;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.pirategame.entities.AvailableSpawn;
+import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.EnemyShip;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.main.PirateGame;
@@ -26,6 +28,16 @@ public class EnemyShipTest {
         mockGame = MockitoWorldGen.mockGame();
     }
     
+    //ENEMY_TEST_INSTANTIATION
+    @Test(expected = Test.None.class)
+    public void testInstantiation() {
+    	GameScreen screen = mockScreen;
+    	String difficulty = "easy";
+        new EnemyShip(screen, 10, 10,
+        		"ships&colleges/anne_lister_ship.png", "Anne Lister",  difficulty);
+    }
+    
+    //ENEMY_TEST_DESTROYED
     @Test()
     public void enemyShipDestroyed() {
     	GameScreen screen = mockScreen;
@@ -39,6 +51,7 @@ public class EnemyShipTest {
         assertTrue(enemyShip.isDestroyed());
     }
     
+    //ENEMY_TEST_FIRE
     @Test()
     public void enemyShipFire() {
     	GameScreen screen = new GameScreen(mockGame, true);
@@ -52,8 +65,9 @@ public class EnemyShipTest {
         assertTrue("Can enemyShip fire?",newx < oldx);
     }
     
+    //ENEMY_TEST_FIRE_ON_PLAYER
     @Test()
-    public void enemyShipFollow() {
+    public void enemyShipFireOnPlayer() {
     	GameScreen screen = new GameScreen(mockGame, true);
     	//Player player = new Player(screen);
     	String difficulty = "hard";
@@ -65,6 +79,7 @@ public class EnemyShipTest {
         assertTrue(enemyShip.getCannonBalls().size > 0);
     }
     
+    //ENEMY_TEST_MOVE
     @Test()
     public void enemyShipMove() {
     	boolean test = true;
@@ -101,8 +116,9 @@ public class EnemyShipTest {
         assertTrue(test);
     }
     
+    //ENEMY_TEST_DAMAGED
     @Test()
-    public void enemyShipHitByPlayer() {
+    public void enemyShipDamaged() {
     	GameScreen screen = mockScreen;
     	String difficulty = "easy";
     	String ship = "ships&colleges/anne_lister_ship.png";

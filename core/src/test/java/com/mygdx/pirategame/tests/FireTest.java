@@ -18,6 +18,7 @@ public class FireTest {
 	private static GameScreen mockScreen;
 	private static PirateGame mockGame;
 
+	
     @BeforeClass
     public static void init() {
     	MockitoWorldGen.mockHud();
@@ -25,11 +26,13 @@ public class FireTest {
         mockGame = MockitoWorldGen.mockGame();
     }
     
+    //FIRE_TEST_INSTIATION
     @Test(expected = Test.None.class)
     public void testInstantiation() {
         new Fire(mockScreen, 10, 10);
     }
     
+    //FIRE_TEST_DESTROYED
     @Test()
     public void isDestoryed() {
     	GameScreen screen = mockScreen;
@@ -40,6 +43,7 @@ public class FireTest {
         assertTrue(fire.isDestroyed());
     }
     
+    //FIRE_DAMAGES
     @Test()
     public void damagesEnemy() {
     	GameScreen screen = new GameScreen(mockGame, true);

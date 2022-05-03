@@ -2,6 +2,7 @@ package com.mygdx.pirategame.tests;
 
 import com.mygdx.pirategame.entities.College;
 import com.mygdx.pirategame.entities.AvailableSpawn;
+import com.mygdx.pirategame.entities.Coin;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.main.PirateGame;
 import com.mygdx.pirategame.screens.GameScreen;
@@ -26,7 +27,19 @@ public class CollegeTest {
         mockGame = MockitoWorldGen.mockGame();
     }
     
-
+    //COLLEGE_TEST_INSTANTIATION
+    @Test(expected = Test.None.class)
+    public void testInstantiation() {
+    	GameScreen screen = mockScreen;
+    	AvailableSpawn invalidSpawn = new AvailableSpawn();
+    	String difficulty = "easy";
+    	String flag = "ships&colleges/anne_lister_flag.png";
+    	String ship = "ships&colleges/anne_lister_ship.png";
+        new College(screen, "Anne Lister",10, 10,
+               flag, ship, 8, invalidSpawn, difficulty);
+    }
+    
+    //COLLEGE_TEST_DESTROYED
     @Test()
     public void collegeDestoryed() {
     	GameScreen screen = mockScreen;
@@ -43,6 +56,7 @@ public class CollegeTest {
         assertTrue(college.isDestroyed());
     }
     
+  //COLLEGE_TEST_DAMAGED
     @Test()
     public void collegeDamaged() {
     	GameScreen screen = mockScreen;
@@ -58,6 +72,7 @@ public class CollegeTest {
         assertTrue(college.health < 100);
     }
     
+    //COLLEGE_TEST_FIRE
     @Test()
     public void collegeFire() {
     	GameScreen screen = new GameScreen(mockGame, true);

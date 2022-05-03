@@ -23,11 +23,7 @@ public class GameScreenTest {
         MockitoWorldGen.mockHud();
 	}
 	
-	@Test
-	public void testConstruction() {
-		GameScreen screen = new GameScreen(mockGame, true);
-	}
-	
+	//GAME_OVER_TEST
 	@Test
 	public void gameOverCheck() {
 		GameScreen screen = new GameScreen(mockGame, true);
@@ -36,6 +32,7 @@ public class GameScreenTest {
 		assertTrue(screen.game.getScreen() == null);
 	}
 	
+	//WEATHER_TEST_ACTIVATES
 	//Can't simulate weather functionality through hud so just calling method
 	@Test
 	public void weatherCheck() {

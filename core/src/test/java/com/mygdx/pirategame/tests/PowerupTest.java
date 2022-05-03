@@ -26,11 +26,13 @@ public class PowerupTest {
         MockitoWorldGen.mockHud();
     }
     
+    //POWERUP_TEST_INSTANTIATION
     @Test(expected = Test.None.class)
     public void testInstantiation() {
         new Powerup(mockScreen, 10, 10, false);
     }
     
+    //POWERUP_TEST_DESTROYED
     @Test()
     public void isDestoryed() {
     	GameScreen screen = mockScreen;
@@ -40,6 +42,7 @@ public class PowerupTest {
         assertTrue(powerup.isDestroyed());
     }
     
+    //POWERUP_TEST_STOPS
     @Test()
     public void powerupStops() {
     	GameScreen screen = mockScreen;
@@ -51,6 +54,7 @@ public class PowerupTest {
         assertTrue(powerupType == "");
     }
     
+    //POWERUP_TEST_CHOSEN
     @Test()
     public void powerupChosen() {
     	boolean auto = false;
@@ -83,6 +87,7 @@ public class PowerupTest {
         assertTrue(all);
     }
     
+    //POWERUP_CHANGES
     @Test()
     public void keepPowerups() {
     	boolean test = true;
@@ -120,7 +125,4 @@ public class PowerupTest {
     	}
     	assertTrue(test);
     }
-    
-    
-    
 }

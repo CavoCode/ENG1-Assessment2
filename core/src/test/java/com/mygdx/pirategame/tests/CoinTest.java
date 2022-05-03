@@ -25,11 +25,13 @@ public class CoinTest {
         MockitoWorldGen.mockHud();
     }
     
+    //COIN_TEST_INSTANTIATION
     @Test(expected = Test.None.class)
     public void testInstantiation() {
         new Coin(mockScreen, 10, 10, false);
     }
     
+    //COIN_IS_DESTROYED
     @Test()
     public void isDestoryed() {
     	GameScreen screen = mockScreen;
@@ -39,6 +41,7 @@ public class CoinTest {
         assertTrue(coin.isDestroyed());
     }
     
+    //COIN_CONTACT_WORKS
     @Test()
     public void coinContactWorks() {
     	Hud.setCoins(0);

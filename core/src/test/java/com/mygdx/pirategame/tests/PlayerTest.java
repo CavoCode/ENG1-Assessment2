@@ -1,6 +1,7 @@
 package com.mygdx.pirategame.tests;
 
 import com.mygdx.pirategame.entities.CollegeFire;
+import com.mygdx.pirategame.entities.Fire;
 import com.mygdx.pirategame.entities.Player;
 import com.mygdx.pirategame.hud.Hud;
 import com.mygdx.pirategame.main.PirateGame;
@@ -26,9 +27,15 @@ public class PlayerTest {
         MockitoWorldGen.mockHud();
     }
     
+    //PLAYER_TEST_INSTANTIATION
+    @Test(expected = Test.None.class)
+    public void testInstantiation() {
+        new Player(mockScreen);
+    }
 
+    //PLAYER_TEST_MOVEMENT
     @Test()
-    public void playerMoveRight() {
+    public void playerMovement() {
     	GameScreen screen = mockScreen;
         Player player = new Player(screen);
         float oldX = player.getX();
@@ -38,6 +45,7 @@ public class PlayerTest {
         assertTrue(newX > oldX);
     }
     
+    //PLAYER_TEST_STOP_MOVEMENT
     @Test()
     public void playerStop() {
     	GameScreen screen = mockScreen;
@@ -51,6 +59,7 @@ public class PlayerTest {
         assertTrue(newx == 0);
     }
     
+    //PLAYER_TEST_FIRE
     @Test()
     public void playerFire() {
     	GameScreen screen = mockScreen;
@@ -62,9 +71,9 @@ public class PlayerTest {
         assertTrue(newx < oldx);
     }
     
-    
+    //PLAYER_TEST_DAMAGED
     @Test()
-    public void playerHitByCollegeFire() {
+    public void playerDamaged() {
     	GameScreen screen = new GameScreen(mockGame, true);
     	CollegeFire collegeFire = new CollegeFire(screen, screen.getPlayerPos().x, screen.getPlayerPos().y);
     	screen.update(0.1f);
