@@ -214,7 +214,7 @@ public class Hud implements Disposable {
         if (value > 0) {
             coins += value * coinMulti;
             coinLabel.setText(String.format("%03d", coins));
-        }else if (value < 0) { //used if buying upgrade from shop so dont include coin multiplier
+        }else if (value < 0 && getCoins() >= Math.abs(value)) { //used if buying upgrade from shop so dont include coin multiplier
         	coins += value;
         	coinLabel.setText(String.format("%03d", coins));
         }
