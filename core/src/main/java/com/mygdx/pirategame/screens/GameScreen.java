@@ -367,6 +367,7 @@ public class GameScreen implements Screen {
             //----------------------
 
             //TEST INPUTS KEY TEAM 17-------
+            /**
             //Sinks any sinkable objects
             if (Gdx.input.isKeyJustPressed(Input.Keys.F)) {
                 for (int i = 0; i < Coins.size(); i++){
@@ -379,6 +380,7 @@ public class GameScreen implements Screen {
                     Hud.weatherTimer = 101;
                 }
             }
+            */
             //------------------------------
 
         }
